@@ -41,13 +41,15 @@ public class ChatAPTBehaviour : MonoBehaviour
         userInput = inputField.text; //Store the text 
         inputField.text = ""; //Clears the text 
 
-        ProcessResponse(userInput);
+        SelectResponse(userInput);
     }
-    private void ProcessResponse(string input)
+    private void SelectResponse(string input)
     {
         string[] userInput = input.ToLower().Split(' ');
 
         string selectedResponse = "Sorry I don't understand that";
+        int responseWeight = 0;
+        int highestWeight = 0;
 
         foreach (Response response in responsesDB)
         {
@@ -55,7 +57,8 @@ public class ChatAPTBehaviour : MonoBehaviour
             {
                 if (response.keywords.Contains(word))
                 {
-                    selectedResponse = response.response;
+                    selectedResponse = response.response; 
+                    responseWeight++;
                 }
             }
         }
@@ -80,6 +83,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         responsesDB.Add(new Response(new string[] { "Hi" }, "Hi! I'm LeBron", ""));
         responsesDB.Add(new Response(new string[] { "Basketball" }, "I love Kobe", ""));
         responsesDB.Add(new Response(new string[] { "Love" }, "You are my sunshine", ""));
+        responsesDB.Add(new Response(new string[] { "Scream" }, "AAAAAAAAAAAAAAA", ""));
     }
     private List<string> ParseCSV(string filePath)
     {
