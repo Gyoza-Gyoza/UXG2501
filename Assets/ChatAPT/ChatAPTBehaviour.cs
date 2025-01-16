@@ -86,7 +86,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         responsesDB.Add(new Response(new string[] { "Hello" }, "Hi! I'm LeBron", ""));
         responsesDB.Add(new Response(new string[] { "Hi" }, "Hi! I'm LeBron", ""));
         responsesDB.Add(new Response(new string[] { "Basketball" }, "I love Kobe", ""));
-        responsesDB.Add(new Response(new string[] { "Love" }, "I love Kobe", ""));
+        responsesDB.Add(new Response(new string[] { "I", "love", "you" }, "I love Kobe", ""));
         responsesDB.Add(new Response(new string[] { "Scream", "if", "you" }, "AAAAAAAAAAAAAAA", ""));
         responsesDB.Add(new Response(new string[] { "You", "are", "my", "sunshine" }, "My only sunshine", ""));
         responsesDB.Add(new Response(new string[] { "Sunshine" }, "Huh?", ""));
@@ -118,7 +118,7 @@ public class ChatAPTBehaviour : MonoBehaviour
 }
 public class Response
 {
-    public string[] keywords;
+    public HashSet<string> keywords = new HashSet<string>();
     public string response;
     public string unlockCondition;
     public bool isUnlocked; 
@@ -128,9 +128,8 @@ public class Response
         string[] tempKeywords = new string[keywords.Length]; 
         for(int i = 0; i < tempKeywords.Length; i++)
         {
-            tempKeywords[i] = keywords[i].ToLower();
+            this.keywords.Add(keywords[i].ToLower());
         }
-        this.keywords = tempKeywords;
 
         this.response = response;
         this.unlockCondition = unlockCondition;
