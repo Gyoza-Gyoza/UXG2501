@@ -48,20 +48,24 @@ public class ChatAPTBehaviour : MonoBehaviour
         string[] userInput = input.ToLower().Split(' ');
 
         string selectedResponse = "Sorry I don't understand that";
-        int responseWeight = 0;
         int highestWeight = 0;
 
         foreach (Response response in responsesDB)
         {
+            int responseWeight = 0;
+
             foreach (string word in userInput)
             {
                 if (response.keywords.Contains(word))
                 {
-                    selectedResponse = response.response; 
                     responseWeight++;
+
+                    if(highestWeight < responseWeight) highestWeight = responseWeight; 
                 }
             }
+            if (responseWeight >= highestWeight) selectedResponse = response.response;
         }
+        Debug.Log("Response weight: " + highestWeight);
         Respond(selectedResponse);
     }
     private void Respond(string response)
@@ -82,8 +86,10 @@ public class ChatAPTBehaviour : MonoBehaviour
         responsesDB.Add(new Response(new string[] { "Hello" }, "Hi! I'm LeBron", ""));
         responsesDB.Add(new Response(new string[] { "Hi" }, "Hi! I'm LeBron", ""));
         responsesDB.Add(new Response(new string[] { "Basketball" }, "I love Kobe", ""));
-        responsesDB.Add(new Response(new string[] { "Love" }, "You are my sunshine", ""));
-        responsesDB.Add(new Response(new string[] { "Scream" }, "AAAAAAAAAAAAAAA", ""));
+        responsesDB.Add(new Response(new string[] { "Love" }, "I love Kobe", ""));
+        responsesDB.Add(new Response(new string[] { "Scream", "if", "you" }, "AAAAAAAAAAAAAAA", ""));
+        responsesDB.Add(new Response(new string[] { "You", "are", "my", "sunshine" }, "My only sunshine", ""));
+        responsesDB.Add(new Response(new string[] { "Sunshine" }, "Huh?", ""));
     }
     private List<string> ParseCSV(string filePath)
     {
