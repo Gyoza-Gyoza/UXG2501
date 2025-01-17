@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class ChatAPTBehaviour : MonoBehaviour
@@ -26,6 +27,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
     private StreamReader sr;
     private WaitForSeconds typingSpeed;
+    private string csvData;
 
     private void Awake()
     {
@@ -33,7 +35,8 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     private void Start()
     {
-        InitializeResponses();
+        StartCoroutine(DownloadCSV());
+        //InitializeResponses();
         typingSpeed = new WaitForSeconds(typeSpeed);
     }
     private void Update()
@@ -50,6 +53,7 @@ public class ChatAPTBehaviour : MonoBehaviour
                 Debug.Log(debug);
             }
         }
+        if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
     }
     public void SubmitResponse()
     {
@@ -122,6 +126,31 @@ public class ChatAPTBehaviour : MonoBehaviour
         {
             text.text += c;
             yield return typingSpeed;
+        }
+    }
+    public IEnumerator DownloadCSV()
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get("https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?format=csv");
+
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.result == UnityWebRequest.Result.Success)
+        {
+            csvData = webRequest.downloadHandler.text;
+            Debug.Log("CSV Downloaded Successfully!");
+
+            string[] data = csvData.Split("\r\n"); 
+
+            for(int i = 1; i < data.Length; i++)
+            {
+                string[] values = data[i].Split(',');
+
+                responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
+            }
+        }
+        else
+        {
+            Debug.LogError($"Failed to download CSV: {webRequest.error}");
         }
     }
 }
