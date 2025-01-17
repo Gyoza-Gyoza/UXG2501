@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,11 +19,11 @@ public class ChatAPTBehaviour : MonoBehaviour
     private float typeSpeed;
 
     [SerializeField]
-    private string[] invalidInputResponse;
+    private Response[] invalidInputResponse;
 
     private TMP_InputField inputField; 
     private string userInput;
-    private List<Response> responsesDB = new List<Response>();
+    private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
     private StreamReader sr;
     private WaitForSeconds typingSpeed;
 
@@ -38,6 +39,17 @@ public class ChatAPTBehaviour : MonoBehaviour
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Return)) SubmitResponse();
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            foreach(KeyValuePair<string, Response> response in responsesDB)
+            {
+                string debug = "";
+
+                debug += response.Key + " " + response.Value.keywords.Count + " " + response.Value.unlocksResponse + "\n";
+                debug += response.Value.response + " " + response.Value.isUnlocked;
+                Debug.Log(debug);
+            }
+        }
     }
     public void SubmitResponse()
     {
@@ -50,16 +62,17 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         string[] userInput = input.ToLower().Split(' ');
 
-        string selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
+        Response selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
         int highestWeight = 0;
 
-        foreach (Response response in responsesDB)
+        foreach (KeyValuePair<string, Response> response in responsesDB)
         {
-            int responseWeight = 0;
+            int responseWeight = 0; //Initialize the weight
+            if (response.Value.isUnlocked == false) continue; //Skip response if its not unlocked
 
             foreach (string word in userInput)
             {
-                if (response.keywords.Contains(word))
+                if (response.Value.keywords.Contains(word))
                 {
                     responseWeight++;
 
@@ -67,39 +80,31 @@ public class ChatAPTBehaviour : MonoBehaviour
                 }
             }
             if (responseWeight == 0) continue;
-            if (responseWeight >= highestWeight) selectedResponse = response.response;
+            if (responseWeight >= highestWeight) selectedResponse = response.Value;
         }
-        Debug.Log("Response weight: " + highestWeight);
         Respond(selectedResponse);
     }
-    private void Respond(string response)
+    private void Respond(Response response)
     {
-        StartCoroutine(TypingEffect(chatAPTTextBox, response));
+        if (response.unlocksResponse != "") responsesDB[response.unlocksResponse].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
+        StartCoroutine(TypingEffect(chatAPTTextBox, response.response));
     }
     private void InitializeResponses()
     {
-        //List<string> tempResponses = ParseCSV("ResponsesDatabase.csv");
+        List<string> tempResponses = ParseCSV("ResponsesDatabase.csv");
 
-        //foreach (string response in tempResponses)
-        //{
-        //    string[] values = response.Split(',');
+        foreach (string response in tempResponses)
+        {
+            string[] values = response.Split(',');
 
-        //    responsesDB.Add(new Response(values[0].Split('@'), values[1], values[2], false));
-        //}
-
-        responsesDB.Add(new Response(new string[] { "Hello" }, "Hi! I'm LeBron", ""));
-        responsesDB.Add(new Response(new string[] { "Hi" }, "Hi! I'm LeBron", ""));
-        responsesDB.Add(new Response(new string[] { "Basketball" }, "I love Kobe", ""));
-        responsesDB.Add(new Response(new string[] { "I", "love", "you" }, "I love Kobe", ""));
-        responsesDB.Add(new Response(new string[] { "Scream", "if", "you" }, "AAAAAAAAAAAAAAA", ""));
-        responsesDB.Add(new Response(new string[] { "You", "are", "my", "sunshine" }, "My only sunshine", ""));
-        responsesDB.Add(new Response(new string[] { "Sunshine" }, "Huh?", ""));
+            responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
+        }
     }
     private List<string> ParseCSV(string filePath)
     {
         List<string> result = new List<string>();
 
-        sr = File.OpenText("/ChatAPT/" + filePath);
+        sr = File.OpenText("Assets/ChatAPT/" + filePath);
 
         sr.ReadLine();
         while (!sr.EndOfStream)
@@ -120,6 +125,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         }
     }
 }
+[System.Serializable]
 public class Response
 {
     public HashSet<string> keywords = new HashSet<string>();
@@ -127,7 +133,7 @@ public class Response
     public string unlocksResponse;
     public bool isUnlocked; 
 
-    public Response(string[] keywords, string response, string unlockCondition)
+    public Response(string[] keywords, string response, string unlocksResponse, bool isUnlocked)
     {
         string[] tempKeywords = new string[keywords.Length]; 
         for(int i = 0; i < tempKeywords.Length; i++)
@@ -136,7 +142,7 @@ public class Response
         }
 
         this.response = response;
-        this.unlocksResponse = unlockCondition;
-        isUnlocked = false;
+        this.unlocksResponse = unlocksResponse;
+        this.isUnlocked = isUnlocked;
     }
 }

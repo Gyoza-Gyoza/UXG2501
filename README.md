@@ -6,3 +6,4 @@ Current Features
 -Pulling responses from a csv file 
 -Responses based on keywords 
 -Weighted responses 
+-Unlockable responses

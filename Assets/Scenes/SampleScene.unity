@@ -909,6 +909,16 @@ MonoBehaviour:
   userInputGO: {fileID: 487324175}
   chatAPTTextBox: {fileID: 1367052835}
   typeSpeed: 0.01
+  invalidInputResponse:
+  - response: Sorry I don't understand that
+    unlocksResponse: 
+    isUnlocked: 1
+  - response: Can you try something else
+    unlocksResponse: 
+    isUnlocked: 1
+  - response: I understand basketball but not that
+    unlocksResponse: 
+    isUnlocked: 1
 --- !u!4 &1048299077
 Transform:
   m_ObjectHideFlags: 0
