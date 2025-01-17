@@ -17,6 +17,9 @@ public class ChatAPTBehaviour : MonoBehaviour
     [SerializeField]
     private float typeSpeed;
 
+    [SerializeField]
+    private string[] invalidInputResponse;
+
     private TMP_InputField inputField; 
     private string userInput;
     private List<Response> responsesDB = new List<Response>();
@@ -47,7 +50,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         string[] userInput = input.ToLower().Split(' ');
 
-        string selectedResponse = "Sorry I don't understand that";
+        string selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
         int highestWeight = 0;
 
         foreach (Response response in responsesDB)
@@ -63,6 +66,7 @@ public class ChatAPTBehaviour : MonoBehaviour
                     if(highestWeight < responseWeight) highestWeight = responseWeight; 
                 }
             }
+            if (responseWeight == 0) continue;
             if (responseWeight >= highestWeight) selectedResponse = response.response;
         }
         Debug.Log("Response weight: " + highestWeight);
@@ -120,7 +124,7 @@ public class Response
 {
     public HashSet<string> keywords = new HashSet<string>();
     public string response;
-    public string unlockCondition;
+    public string unlocksResponse;
     public bool isUnlocked; 
 
     public Response(string[] keywords, string response, string unlockCondition)
@@ -132,7 +136,7 @@ public class Response
         }
 
         this.response = response;
-        this.unlockCondition = unlockCondition;
+        this.unlocksResponse = unlockCondition;
         isUnlocked = false;
     }
 }
