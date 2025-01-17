@@ -7,3 +7,4 @@ Current Features
 -Responses based on keywords 
 -Weighted responses 
 -Unlockable responses
+-Pulling from google sheets
