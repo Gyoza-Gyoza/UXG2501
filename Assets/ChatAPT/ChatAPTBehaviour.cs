@@ -22,6 +22,15 @@ public class ChatAPTBehaviour : MonoBehaviour
     [SerializeField]
     private Response[] invalidInputResponse;
 
+    [SerializeField]
+    private GameObject chatAPTTextPrefab, userTextPrefab;
+
+    [SerializeField]
+    private Transform chatContent;
+
+    [SerializeField]
+    private ScrollRect scrollRect;
+
     private TMP_InputField inputField; 
     private string userInput;
     private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
@@ -29,6 +38,11 @@ public class ChatAPTBehaviour : MonoBehaviour
     private WaitForSeconds typingSpeed;
     private string csvData;
 
+    private enum ChatEntity
+    {
+        ChatAPT, 
+        User
+    }
     private void Awake()
     {
         inputField = userInputGO.GetComponent<TMP_InputField>();
@@ -55,11 +69,29 @@ public class ChatAPTBehaviour : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
     }
+    private void CreateTextEntry(ChatEntity texter, string text)
+    {
+        GameObject textPrefab = null;
+        switch (texter)
+        {
+            case ChatEntity.ChatAPT:
+                textPrefab = Instantiate(chatAPTTextPrefab, chatContent);
+                StartCoroutine(TypingEffect(textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>(), text));
+                break;
+
+            case ChatEntity.User:
+                textPrefab = Instantiate(userTextPrefab, chatContent);
+                textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text = text;
+                break;
+        }
+        ScrollToBottom();
+    }
     public void SubmitResponse()
     {
         userInput = inputField.text; //Store the text 
         inputField.text = ""; //Clears the text 
 
+        CreateTextEntry(ChatEntity.User, userInput);
         SelectResponse(userInput);
     }
     private void SelectResponse(string input)
@@ -91,33 +123,38 @@ public class ChatAPTBehaviour : MonoBehaviour
     private void Respond(Response response)
     {
         if (response.unlocksResponse != "") responsesDB[response.unlocksResponse].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
-        StartCoroutine(TypingEffect(chatAPTTextBox, response.response));
+        CreateTextEntry(ChatEntity.ChatAPT, response.response);
     }
-    private void InitializeResponses()
+    public void ScrollToBottom()
     {
-        List<string> tempResponses = ParseCSV("ResponsesDatabase.csv");
-
-        foreach (string response in tempResponses)
-        {
-            string[] values = response.Split(',');
-
-            responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
-        }
+        Canvas.ForceUpdateCanvases(); // Ensure layout updates immediately
+        scrollRect.verticalNormalizedPosition = 0; // Set scroll to the bottom
     }
-    private List<string> ParseCSV(string filePath)
-    {
-        List<string> result = new List<string>();
+    //private void InitializeResponses()
+    //{
+    //    List<string> tempResponses = ParseCSV("ResponsesDatabase.csv");
 
-        sr = File.OpenText("Assets/ChatAPT/" + filePath);
+    //    foreach (string response in tempResponses)
+    //    {
+    //        string[] values = response.Split(',');
 
-        sr.ReadLine();
-        while (!sr.EndOfStream)
-        {
-            result.Add(sr.ReadLine());
-        }
+    //        responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
+    //    }
+    //}
+    //private List<string> ParseCSV(string filePath)
+    //{
+    //    List<string> result = new List<string>();
 
-        return result;
-    }
+    //    sr = File.OpenText("Assets/ChatAPT/" + filePath);
+
+    //    sr.ReadLine();
+    //    while (!sr.EndOfStream)
+    //    {
+    //        result.Add(sr.ReadLine());
+    //    }
+
+    //    return result;
+    //}
     private IEnumerator TypingEffect(TextMeshProUGUI text, string textToType)
     {
         text.text = ""; //Initializes text at the start
@@ -160,12 +197,12 @@ public class Response
     public HashSet<string> keywords = new HashSet<string>();
     public string response;
     public string unlocksResponse;
-    public bool isUnlocked; 
+    public bool isUnlocked;
 
     public Response(string[] keywords, string response, string unlocksResponse, bool isUnlocked)
     {
-        string[] tempKeywords = new string[keywords.Length]; 
-        for(int i = 0; i < tempKeywords.Length; i++)
+        string[] tempKeywords = new string[keywords.Length];
+        for (int i = 0; i < tempKeywords.Length; i++)
         {
             this.keywords.Add(keywords[i].ToLower());
         }
