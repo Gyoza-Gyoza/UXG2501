@@ -33,7 +33,8 @@ public class ChatAPTBehaviour : MonoBehaviour
 
     private TMP_InputField inputField; 
     private string userInput;
-    private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
+    private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>(),
+        exactResponsesDB = new Dictionary<string, Response>(); 
     private StreamReader sr;
     private WaitForSeconds typingSpeed;
     private string csvData;
@@ -50,7 +51,6 @@ public class ChatAPTBehaviour : MonoBehaviour
     private void Start()
     {
         StartCoroutine(DownloadCSV());
-        //InitializeResponses();
         typingSpeed = new WaitForSeconds(typeSpeed);
     }
     private void Update()
@@ -102,6 +102,9 @@ public class ChatAPTBehaviour : MonoBehaviour
         Response selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
         int highestWeight = 0;
 
+        //Check for exact responses first 
+        if(CheckExact(input)) selectedResponse = exactResponsesDB[input.Replace(' ', '@')];
+
         foreach (KeyValuePair<string, Response> response in responsesDB)
         {
             int responseWeight = 0; //Initialize the weight
@@ -109,6 +112,8 @@ public class ChatAPTBehaviour : MonoBehaviour
 
             foreach (string word in userInput)
             {
+                if (response.Key.Contains('@')) continue; //Skips over exact keywords
+
                 if (response.Value.keywords.Contains(word))
                 {
                     responseWeight++;
@@ -121,6 +126,16 @@ public class ChatAPTBehaviour : MonoBehaviour
         }
         Respond(selectedResponse);
     }
+    private bool CheckExact(string input)
+    {
+        input.ToLower().Replace(' ', '@');
+
+        if(exactResponsesDB.ContainsKey(input))
+        {
+            return true;
+        }
+        return false;
+    }
     private void Respond(Response response)
     {
         if (response.unlocksResponse != "") responsesDB[response.unlocksResponse].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
@@ -131,31 +146,6 @@ public class ChatAPTBehaviour : MonoBehaviour
         Canvas.ForceUpdateCanvases(); // Ensure layout updates immediately
         scrollRect.verticalNormalizedPosition = 0; // Set scroll to the bottom
     }
-    //private void InitializeResponses()
-    //{
-    //    List<string> tempResponses = ParseCSV("ResponsesDatabase.csv");
-
-    //    foreach (string response in tempResponses)
-    //    {
-    //        string[] values = response.Split(',');
-
-    //        responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
-    //    }
-    //}
-    //private List<string> ParseCSV(string filePath)
-    //{
-    //    List<string> result = new List<string>();
-
-    //    sr = File.OpenText("Assets/ChatAPT/" + filePath);
-
-    //    sr.ReadLine();
-    //    while (!sr.EndOfStream)
-    //    {
-    //        result.Add(sr.ReadLine());
-    //    }
-
-    //    return result;
-    //}
     private IEnumerator TypingEffect(TextMeshProUGUI text, string textToType)
     {
         text.text = ""; //Initializes text at the start
@@ -183,7 +173,12 @@ public class ChatAPTBehaviour : MonoBehaviour
             {
                 string[] values = data[i].Split(',');
 
-                responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
+                if (values[1].Contains('@'))
+                {
+                    exactResponsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
+                    Debug.Log("Added exact keyword");
+                }
+                else responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
             }
         }
         else
