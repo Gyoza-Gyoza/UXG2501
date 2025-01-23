@@ -68,7 +68,7 @@ public class ChatAPTBehaviour : MonoBehaviour
             }
         }
         if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
-        if (Input.GetKeyDown(KeyCode.I)) Application.ExternalCall("reloadFramerPage();");
+        if (Input.GetKeyDown(KeyCode.I)) Application.ExternalEval("eval('reloadFramerPage()');");
     }
     private void CreateTextEntry(ChatEntity texter, string text)
     {
