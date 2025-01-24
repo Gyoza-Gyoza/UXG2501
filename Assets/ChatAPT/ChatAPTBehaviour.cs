@@ -33,8 +33,7 @@ public class ChatAPTBehaviour : MonoBehaviour
 
     private TMP_InputField inputField; 
     private string userInput;
-    private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>(),
-        exactResponsesDB = new Dictionary<string, Response>(); 
+    private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
     private StreamReader sr;
     private WaitForSeconds typingSpeed;
     private string csvData;
@@ -63,12 +62,16 @@ public class ChatAPTBehaviour : MonoBehaviour
                 string debug = "";
 
                 debug += response.Key + " " + response.Value.keywords.Count + " " + response.Value.unlocksResponse + "\n";
+                foreach(string keyword in response.Value.keywords)
+                {
+                    debug += keyword + "\n";
+                }
                 debug += response.Value.response + " " + response.Value.isUnlocked;
                 Debug.Log(debug);
             }
         }
         if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
-        if (Input.GetKeyDown(KeyCode.I)) WebGLInteraction.TriggerRefresh();
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
     }
     private void CreateTextEntry(ChatEntity texter, string text)
     {
@@ -99,12 +102,17 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         string[] userInput = input.ToLower().Split(' ');
 
-        Response selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
+        Response selectedResponse;
         int highestWeight = 0;
 
         //Check for exact responses first 
-        if(CheckExact(input)) selectedResponse = exactResponsesDB[input.Replace(' ', '@')];
+        if (CheckExact(input, out selectedResponse))
+        {
+            Respond(selectedResponse);
+            return;
+        }
 
+        //If no exact responses, look for a most matched response
         foreach (KeyValuePair<string, Response> response in responsesDB)
         {
             int responseWeight = 0; //Initialize the weight
@@ -112,28 +120,36 @@ public class ChatAPTBehaviour : MonoBehaviour
 
             foreach (string word in userInput)
             {
-                if (response.Key.Contains('@')) continue; //Skips over exact keywords
-
                 if (response.Value.keywords.Contains(word))
                 {
                     responseWeight++;
 
-                    if(highestWeight < responseWeight) highestWeight = responseWeight; 
+                    if (highestWeight < responseWeight) highestWeight = responseWeight;
                 }
             }
             if (responseWeight == 0) continue;
             if (responseWeight >= highestWeight) selectedResponse = response.Value;
         }
+
+        //If there are no matches, respond with a random invalid response
+        if (selectedResponse == null) selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
+
+        //Respond with the selected response
         Respond(selectedResponse);
     }
-    private bool CheckExact(string input)
+    private bool CheckExact(string input, out Response foundResponse)
     {
-        input.ToLower().Replace(' ', '@');
+        string tempInput = input.ToLower().Replace(' ', '@');
 
-        if(exactResponsesDB.ContainsKey(input))
+        foreach(KeyValuePair <string, Response> response in responsesDB)
         {
-            return true;
+            if (response.Value.keywords.Contains(tempInput))
+            {
+                foundResponse = response.Value;
+                return true;
+            }
         }
+        foundResponse = null;
         return false;
     }
     private void Respond(Response response)
@@ -173,12 +189,7 @@ public class ChatAPTBehaviour : MonoBehaviour
             {
                 string[] values = data[i].Split(',');
 
-                if (values[1].Contains('@'))
-                {
-                    exactResponsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
-                    Debug.Log("Added exact keyword");
-                }
-                else responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
+                responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
             }
         }
         else
