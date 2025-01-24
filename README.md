@@ -17,9 +17,10 @@ U- Responses that do not require to be unlocked
 L- Responses that are locked behind other responses, can be unlocked by using the UnlocksResponse column  
   
 E.g.  
-ResponseID  Keywords	         UnlocksResponse  
-U0000006    You are my sunshine  L0000001  
-L0000001    You make me happy  
+| ResponseID | Keywords  | UnlocksResponse |
+| --- | --- | --- |
+| U0000006  | You are my sunshine  | L0000001 |
+| L0000001  | You make me happy |  |
   
 In this case, the system will lock Response ID L0000001  
   
