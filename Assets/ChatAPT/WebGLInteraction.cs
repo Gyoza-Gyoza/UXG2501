@@ -11,6 +11,9 @@ public class WebGLInteraction : MonoBehaviour
         // Call the JavaScript function
         RefreshPage();
     }
+    [DllImport("__Internal")]
+    private static extern void SendToBrowser(string message);
+
     public static void PrintToBrowserConsole(string message)
     {
         Debug.Log("[UNITY] " + message);
@@ -23,7 +26,7 @@ public class WebGLInteraction : MonoBehaviour
     public void OnBackgroundColorChanged(string newColor)
     {
         string logMessage = "Detected Background Color Change: " + newColor;
-        Debug.Log(logMessage); // Unity Console Log
+        Debug.Log(logMessage); // Print in Unity console
         PrintToBrowserConsole(logMessage); // Also send to browser console
     }
 }

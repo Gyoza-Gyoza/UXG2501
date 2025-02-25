@@ -51,6 +51,8 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         StartCoroutine(DownloadCSV());
         typingSpeed = new WaitForSeconds(typeSpeed);
+        WebGLInteraction.PrintToBrowserConsole("Test log from Unity WebGL!");
+
     }
     private void Update()
     {
