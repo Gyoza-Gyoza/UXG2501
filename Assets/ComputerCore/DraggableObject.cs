@@ -9,6 +9,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private RectTransform rectTransform; 
     private CanvasGroup canvasGroup;
     private Canvas canvas;
+    private Vector2 originalPos;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -17,6 +18,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        originalPos = rectTransform.anchoredPosition;
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
@@ -31,5 +33,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+
+        if(!Tools.IsMouseOnScreen()) rectTransform.anchoredPosition = originalPos;
     }
 }
