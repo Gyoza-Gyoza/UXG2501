@@ -22,8 +22,8 @@ html, body {
 /* Unity Canvas */
 #unity-canvas {
     position: absolute;
-    top: 106px;
-    width: 510px;
+    top: 86px;
+    width: 910px;
     height: auto;
     aspect-ratio: 960/604;
     border: none;
@@ -32,8 +32,8 @@ html, body {
 /* Overlay Image (Monitor Frame) */
 #overlay-image {
     position: absolute;
-    top: 50px;
-    width: 600px;
+    top: 30px;
+    width: 1000px;
     height: auto;
     aspect-ratio: 1122/1074;
     z-index: 10; /* Ensures it's on top */
@@ -65,7 +65,7 @@ html, body {
 }
 
 /* Hide Unity on Small Screens */
-@media (max-width: 1200px) {
+@media (max-width: 1200px), (max-height: 1040px) {
     #unity-container {
         display: none;
     }
