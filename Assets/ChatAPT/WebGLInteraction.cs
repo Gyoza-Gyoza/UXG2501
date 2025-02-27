@@ -21,22 +21,25 @@ public class WebGLInteraction : MonoBehaviour
         }
     }
 
+    [DllImport("__Internal")]
+    private static extern void OnMessageReceived(string message);
+
     [UnityEngine.Scripting.Preserve]
-    public static void OnMessageReceived(string message)
+    public void ReceiveMessage(string message)
     {
-        Debug.Log("[UNITY] 📩 Received message from browser: " + message);
+        Debug.Log($"[UNITY] 📩 Received message from browser: {message}");
 
         if (message == "HideRecycleBin")
         {
             if (recycleBinObj == null)
             {
-                recycleBinObj = GameObject.Find("Recycle Bin"); // Try to find it again
+                recycleBinObj = GameObject.Find("Recycle Bin"); // Try finding it again
             }
 
             if (recycleBinObj != null)
             {
                 Debug.Log("[UNITY] 🗑️ Recycle Bin found. Hiding now...");
-                recycleBinObj.SetActive(false); // Hide the UI element
+                recycleBinObj.SetActive(false);
             }
             else
             {
