@@ -1,46 +1,43 @@
-using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UI; // Required for UI components
 
 public class WebGLInteraction : MonoBehaviour
 {
-    private static GameObject recycleBinObj;
+    public GameObject recycleBinObj; // ✅ Manually assign in Inspector
 
-    private void Start()
+    void Start()
     {
-        // Try to find the Recycle Bin when the script starts
-        recycleBinObj = GameObject.Find("Recycle Bin");
+        Debug.Log("[UNITY] ✅ WebGLInteraction script has loaded successfully.");
+
+        if (recycleBinObj == null)
+        {
+            recycleBinObj = GameObject.Find("Recycle Bin"); // Fallback if not assigned
+        }
 
         if (recycleBinObj != null)
         {
-            Debug.Log("[UNITY] ✅ WebGLInteraction script loaded successfully.");
-            Debug.Log("[UNITY] ✅ Recycle Bin object found at start.");
+            Debug.Log("[UNITY] ✅ Recycle Bin UI found.");
         }
         else
         {
-            Debug.LogWarning("[UNITY] ❌ Recycle Bin object NOT found at start! Make sure it's in the scene.");
+            Debug.LogWarning("[UNITY] ❌ Recycle Bin UI NOT found! Assign it manually.");
         }
     }
 
-    [UnityEngine.Scripting.Preserve]
     public void ReceiveMessage(string message)
     {
         Debug.Log($"[UNITY] 📩 Received message from browser: {message}");
 
         if (message == "HideRecycleBin")
         {
-            if (recycleBinObj == null)
-            {
-                recycleBinObj = GameObject.Find("Recycle Bin");
-            }
-
             if (recycleBinObj != null)
             {
-                Debug.Log("[UNITY] 🗑️ Recycle Bin found. Hiding now...");
-                recycleBinObj.SetActive(false);
+                Debug.Log("[UNITY] 🗑️ Hiding Recycle Bin...");
+                recycleBinObj.SetActive(false); // ✅ Hide the UI
             }
             else
             {
-                Debug.LogWarning("[UNITY] ❌ Recycle Bin object still not found! Check Unity Hierarchy.");
+                Debug.LogWarning("[UNITY] ❌ Recycle Bin object still not found!");
             }
         }
     }

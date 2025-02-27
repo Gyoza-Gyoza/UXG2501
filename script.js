@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("📤 Attempting to send message to Unity: HideRecycleBin");
 
         if (window.unityInstance) {
-            window.unityInstance.SendMessage("WebGLInteractions", "OnMessageReceived", "HideRecycleBin");
+            window.unityInstance.SendMessage("WebGLInteraction", "ReceiveMessage", "HideRecycleBin");
             console.log("✅ Successfully sent message to Unity!");
         } else {
             console.warn("⚠️ Unity WebGL instance not ready. Retrying...");
