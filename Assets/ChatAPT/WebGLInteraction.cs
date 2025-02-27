@@ -7,7 +7,7 @@ public class WebGLInteraction : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("[UNITY] ✅ WebGLInteraction script has loaded successfully.");
+        Debug.Log("[UNITY] ✅ WebGL Script Loaded");
 
         if (recycleBinObj == null)
         {
