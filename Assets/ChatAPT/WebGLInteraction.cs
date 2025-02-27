@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class WebGLInteraction : MonoBehaviour
 {
+    public GameObject recycleBin;
+
     [DllImport("__Internal")]
     private static extern void RefreshPage();
 
@@ -12,34 +14,23 @@ public class WebGLInteraction : MonoBehaviour
         RefreshPage();
     }
 
-    // [DllImport("__Internal")]
-    // private static extern void SendToBrowser(string message);
+    [UnityEngine.Scripting.Preserve]
+    public static void OnMessageReceived(string message)
+    {
+        Debug.Log("[UNITY] Received message from browser: " + message);
 
-    // public static void PrintToBrowserConsole(string message)
-    // {
-    //     Debug.Log("[UNITY] " + message);
-
-    //     #if UNITY_WEBGL && !UNITY_EDITOR
-    //     try
-    //     {
-    //         SendToBrowser("[UNITY] " + message);
-    //     }
-    //     catch
-    //     {
-    //         Debug.LogWarning("[UNITY] JavaScript call failed! Running in Editor?");
-    //     }
-    //     #endif
-    // }
-
-    // void Start()
-    // {
-    //     PrintToBrowserConsole("Test log from Unity WebGL - Startup message");
-    // }
-
-    // public void OnBackgroundColorChanged(string newColor)
-    // {
-    //     string logMessage = "Detected Background Color Change: " + newColor;
-    //     Debug.Log(logMessage); // Unity Console Log
-    //     PrintToBrowserConsole(logMessage); // Also send to browser console
-    // }
+        if (message == "HideRecycleBin")
+        {
+            GameObject recycleBinObj = GameObject.Find("Recycle Bin");
+            if (recycleBinObj != null)
+            {
+                recycleBinObj.SetActive(false); // Hide the UI image
+                Debug.Log("[UNITY] Recycle Bin hidden!");
+            }
+            else
+            {
+                Debug.LogWarning("[UNITY] Recycle Bin object not found!");
+            }
+        }
+    }
 }
