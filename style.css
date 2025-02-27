@@ -65,7 +65,7 @@ html, body {
 }
 
 /* Hide Unity on Small Screens */
-@media (max-width: 1200px), (max-height: 1040px) {
+@media (max-width: 1200px), (max-height: 800px) {
     #unity-container {
         display: none;
     }
