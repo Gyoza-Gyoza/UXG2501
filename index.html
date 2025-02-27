@@ -3,29 +3,30 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | UXG2501</title>
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>ChatAPT - Interactive AI</title>
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 960px; height: 600px; background: #231F20"></canvas>
+
+ <body>
+    <!-- Mobile Warning Message -->
+    <div id="warning-message">We apologise, this experience only works on desktop :(</div>
+
+    <!-- Background Div that will change color -->
+    <div id="background-wallpaper"></div>
+
+    <!-- Unity WebGL Container -->
+    <div id="unity-container">
+        <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+        <img id="overlay-image" src="Build/Images/Monitor.png" alt="Overlay Image">
+    </div>
+
     <script src="Build/Build.loader.js"></script>
+    <script src="script.js"></script>
+
     <script>
-      window.unityInstance = null; // ✅ Define globally
-      console.log("✅ window.unityInstance set to null")
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
-
-        document.body.style.textAlign = "left";
-      }
+      var unityInstance = null;
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Build.data.unityweb",
@@ -36,13 +37,13 @@
         productName: "UXG2501",
         productVersion: "1.0",
       }).then((instance) => {
-        window.unityInstance = instance; // ✅ Store Unity instance globally
-        console.log("✅ Unity WebGL is ready! window.unityInstance:", window.unityInstance);
-      }).catch((message) => {
-        console.error("❌ Unity WebGL failed to load:", message);
+            unityInstance = instance; // ✅ Store Unity instance globally
+            console.log("✅ Unity WebGL Loaded!");
+        }).catch((message) => {
+            console.error("❌ Unity Failed to Load:", message);
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
+      });   
     </script>
   </body>
 </html>
