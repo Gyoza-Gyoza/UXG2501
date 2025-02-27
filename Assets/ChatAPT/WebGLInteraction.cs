@@ -21,9 +21,6 @@ public class WebGLInteraction : MonoBehaviour
         }
     }
 
-    [DllImport("__Internal")]
-    private static extern void OnMessageReceived(string message);
-
     [UnityEngine.Scripting.Preserve]
     public void ReceiveMessage(string message)
     {
@@ -33,7 +30,7 @@ public class WebGLInteraction : MonoBehaviour
         {
             if (recycleBinObj == null)
             {
-                recycleBinObj = GameObject.Find("Recycle Bin"); // Try finding it again
+                recycleBinObj = GameObject.Find("Recycle Bin");
             }
 
             if (recycleBinObj != null)
@@ -46,14 +43,5 @@ public class WebGLInteraction : MonoBehaviour
                 Debug.LogWarning("[UNITY] ❌ Recycle Bin object still not found! Check Unity Hierarchy.");
             }
         }
-    }
-
-    [DllImport("__Internal")]
-    private static extern void RefreshPage();
-
-    public static void TriggerRefresh()
-    {
-        // Call the JavaScript function
-        RefreshPage();
     }
 }

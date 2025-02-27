@@ -71,7 +71,7 @@ public class ChatAPTBehaviour : MonoBehaviour
             }
         }
         if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
+        //if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
     }
     private void CreateTextEntry(ChatEntity texter, string text)
     {
