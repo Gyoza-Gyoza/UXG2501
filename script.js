@@ -3,37 +3,28 @@ console.log("✅ script.js has been loaded successfully!");
 document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ DOM fully loaded. Waiting for Unity WebGL...");
 
+    // Wait for Unity instance
     function notifyUnity() {
-        console.log("Attempting to send message to Unity: HideRecycleBin");
+        console.log("📤 Sending message to Unity: HideRecycleBin");
 
         if (window.unityInstance) {
-            window.unityInstance.SendMessage("Recycle Bin", "ReceiveMessage", "HideRecycleBin");
+            window.unityInstance.SendMessage("WebGLInteraction", "ReceiveMessage", "HideRecycleBin");
             console.log("✅ Successfully sent message to Unity!");
         } else {
-            console.warn("⚠️ Unity WebGL instance not ready. Retrying...");
-            setTimeout(notifyUnity, 500);  // Retry every 500ms
+            console.warn("⚠️ Unity WebGL instance not ready yet.");
+            setTimeout(notifyUnity, 500); // Retry every 500ms
         }
     }
 
-    console.log("✅ Background observer script running...");
+    // Add click event listener to button
+    const button = document.getElementById("hideRecycleBinButton");
 
-    const targetNode = document.getElementById("background-wallpaper");
-
-    if (!targetNode) {
-        console.error("❌ Target element #background-wallpaper not found!");
-        return;
-    }
-
-    console.log("✅ Target Node found successfully!");
-
-    let lastColor = window.getComputedStyle(targetNode).backgroundColor;
-
-    setInterval(() => {
-        let newColor = window.getComputedStyle(targetNode).backgroundColor;
-        if (newColor !== lastColor) {
-            console.log(`🎨 Background color changed! New color: ${newColor}`);
-            lastColor = newColor;
+    if (button) {
+        button.addEventListener("click", function () {
+            console.log("🖱️ Button clicked! Sending message to Unity.");
             notifyUnity();
-        }
-    }, 500); // Check every 500ms
+        });
+    } else {
+        console.error("❌ Button element not found!");
+    }
 });
