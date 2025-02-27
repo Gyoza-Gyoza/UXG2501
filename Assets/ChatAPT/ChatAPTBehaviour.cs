@@ -116,7 +116,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         foreach (KeyValuePair<string, Response> response in responsesDB)
         {
             int responseWeight = 0; //Initialize the weight
-            if (response.Value.isUnlocked == false) continue; //Skip response if its not unlocked
+            if (!response.Value.isUnlocked) continue; //Skip response if its not unlocked
 
             foreach (string word in userInput)
             {
@@ -145,6 +145,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         {
             if (response.Value.keywords.Contains(tempInput))
             {
+                if (!response.Value.isUnlocked) continue; //Skip response if its not unlocked
                 foundResponse = response.Value;
                 return true;
             }
@@ -180,6 +181,7 @@ public class ChatAPTBehaviour : MonoBehaviour
 
         if (webRequest.result == UnityWebRequest.Result.Success)
         {
+            //On CSV downloaded
             csvData = webRequest.downloadHandler.text;
             Debug.Log("CSV Downloaded Successfully!");
 
