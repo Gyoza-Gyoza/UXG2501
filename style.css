@@ -22,7 +22,7 @@ html, body {
 /* Unity Canvas */
 #unity-canvas {
     position: absolute;
-    top: 86px;
+    top: 56px;
     width: 910px;
     height: auto;
     aspect-ratio: 960/604;
@@ -32,7 +32,7 @@ html, body {
 /* Overlay Image (Monitor Frame) */
 #overlay-image {
     position: absolute;
-    top: 30px;
+    top: 0px;
     width: 1000px;
     height: auto;
     aspect-ratio: 1122/1074;
