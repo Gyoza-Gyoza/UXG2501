@@ -32,6 +32,12 @@
         companyName: "DefaultCompany",
         productName: "UXG2501",
         productVersion: "1.0",
+      }).then((instance) => {
+        window.unityInstance = instance; // ✅ Expose instance globally
+        window.SendMessage = instance.SendMessage; // ✅ Assign SendMessage globally
+        console.log("✅ Unity WebGL is ready and SendMessage is accessible!");
+      }).catch((message) => {
+        console.error("❌ Unity WebGL failed to load:", message);
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       });
