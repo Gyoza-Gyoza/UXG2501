@@ -37,7 +37,6 @@ public class ChatAPTBehaviour : MonoBehaviour
     private StreamReader sr;
     private WaitForSeconds typingSpeed;
     private string csvData;
-    public GameObject recycleBinObj;
 
     private enum ChatEntity
     {
@@ -52,8 +51,6 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         StartCoroutine(DownloadCSV());
         typingSpeed = new WaitForSeconds(typeSpeed);
-        recycleBinObj.SetActive(false); // ✅ Hide the UI
-        
     }
     private void Update()
     {
