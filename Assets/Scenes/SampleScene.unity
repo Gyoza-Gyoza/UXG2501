@@ -1530,6 +1530,7 @@ MonoBehaviour:
   userTextPrefab: {fileID: 7785597433619719133, guid: 055281a593e724349a9f4dbfc1f43ff1, type: 3}
   chatContent: {fileID: 702036524}
   scrollRect: {fileID: 993455908}
+  recycleBinObj: {fileID: 2076905537}
 --- !u!4 &1048299077
 Transform:
   m_ObjectHideFlags: 0
