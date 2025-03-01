@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -31,12 +32,27 @@ public class ChatAPTBehaviour : MonoBehaviour
     [SerializeField]
     private ScrollRect scrollRect;
 
+    [SerializeField]
+    private GameObject textArea;
+
+    [Header("Attachment Variables")]
+    [SerializeField]
+    private GameObject attachmentArea;
+    [SerializeField]
+    private GameObject attachmentImage, attachmentBackground;
+    private bool inAttachmentArea; 
+    public bool InAttachmentArea
+    { get { return inAttachmentArea; } set { inAttachmentArea = value; } }
+
     private TMP_InputField inputField; 
     private string userInput;
     private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
     private StreamReader sr;
     private WaitForSeconds typingSpeed;
     private string csvData;
+    private DraggableObject attachment;
+
+    public static ChatAPTBehaviour instance;
 
     private enum ChatEntity
     {
@@ -46,11 +62,13 @@ public class ChatAPTBehaviour : MonoBehaviour
     private void Awake()
     {
         inputField = userInputGO.GetComponent<TMP_InputField>();
+        if (instance == null) instance = this;
     }
     private void Start()
     {
         StartCoroutine(DownloadCSV());
         typingSpeed = new WaitForSeconds(typeSpeed);
+        AttachmentModeActive(false);
     }
     private void Update()
     {
@@ -73,6 +91,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
         //if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
     }
+    #region Response System
     private void CreateTextEntry(ChatEntity texter, string text)
     {
         GameObject textPrefab = null;
@@ -199,6 +218,21 @@ public class ChatAPTBehaviour : MonoBehaviour
             Debug.LogError($"Failed to download CSV: {webRequest.error}");
         }
     }
+    #endregion
+    #region Attachment System
+    public void AttachmentModeActive(bool state)
+    {
+        attachmentArea.SetActive(state);
+        textArea.SetActive(!state);
+    }
+    public void AttachObject(DraggableObject attachment)
+    {
+        this.attachment = attachment;
+        attachmentImage.gameObject.SetActive(true);
+        attachmentImage.GetComponentInChildren<Image>().sprite = attachment.GetComponent<Image>().sprite;
+        attachmentBackground.SetActive(true);
+    }
+    #endregion
 }
 [System.Serializable]
 public class Response

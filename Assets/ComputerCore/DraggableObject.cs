@@ -22,6 +22,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
+        ChatAPTBehaviour.instance.AttachmentModeActive(true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -33,7 +34,14 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+        ChatAPTBehaviour.instance.AttachmentModeActive(false);
 
-        if(!Tools.IsMouseOnScreen()) rectTransform.anchoredPosition = originalPos;
+        if (ChatAPTBehaviour.instance.InAttachmentArea)
+        {
+            ChatAPTBehaviour.instance.AttachObject(this);
+            rectTransform.anchoredPosition = originalPos;
+        }
+
+        if (!Tools.IsMouseOnScreen()) rectTransform.anchoredPosition = originalPos;
     }
 }
