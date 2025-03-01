@@ -107,7 +107,6 @@ public class ChatAPTBehaviour : MonoBehaviour
                 textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text = text;
                 break;
         }
-        ScrollToBottom();
     }
     public void SubmitResponse()
     {
@@ -177,11 +176,6 @@ public class ChatAPTBehaviour : MonoBehaviour
         if (response.unlocksResponse != "") responsesDB[response.unlocksResponse].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
         CreateTextEntry(ChatEntity.ChatAPT, response.response);
     }
-    public void ScrollToBottom()
-    {
-        Canvas.ForceUpdateCanvases(); // Ensure layout updates immediately
-        scrollRect.verticalNormalizedPosition = 0; // Set scroll to the bottom
-    }
     private IEnumerator TypingEffect(TextMeshProUGUI text, string textToType)
     {
         text.text = ""; //Initializes text at the start
@@ -190,6 +184,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         {
             text.text += c;
             yield return typingSpeed;
+            scrollRect.verticalNormalizedPosition = 0;
         }
     }
     public IEnumerator DownloadCSV()
