@@ -72,7 +72,11 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return)) SubmitResponse();
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            SubmitResponse();
+            inputField.ActivateInputField();
+        }
         if(Input.GetKeyDown(KeyCode.P))
         {
             foreach(KeyValuePair<string, Response> response in responsesDB)
@@ -110,11 +114,13 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     public void SubmitResponse()
     {
+        if (inputField.text == "") return;
         userInput = inputField.text; //Store the text 
         inputField.text = ""; //Clears the text 
 
         CreateTextEntry(ChatEntity.User, userInput);
         SelectResponse(userInput);
+        SetAttachmentPopUpActive(false);
     }
     private void SelectResponse(string input)
     {
@@ -223,9 +229,13 @@ public class ChatAPTBehaviour : MonoBehaviour
     public void AttachObject(DraggableObject attachment)
     {
         this.attachment = attachment;
-        attachmentImage.gameObject.SetActive(true);
         attachmentImage.GetComponentInChildren<Image>().sprite = attachment.GetComponent<Image>().sprite;
-        attachmentBackground.SetActive(true);
+        SetAttachmentPopUpActive(true);
+    }
+    public void SetAttachmentPopUpActive(bool state)
+    {
+        attachmentImage.gameObject.SetActive(state);
+        attachmentBackground.SetActive(state);
     }
     #endregion
 }
