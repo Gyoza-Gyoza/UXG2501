@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
@@ -44,12 +43,9 @@ public class ChatAPTBehaviour : MonoBehaviour
     public bool InAttachmentArea
     { get { return inAttachmentArea; } set { inAttachmentArea = value; } }
 
-    private TMP_InputField inputField; 
+    private TMP_InputField inputField;
     private string userInput;
-    private Dictionary<string, Response> responsesDB = new Dictionary<string, Response>();
-    private StreamReader sr;
     private WaitForSeconds typingSpeed;
-    private string csvData;
     private DraggableObject attachment;
 
     public static ChatAPTBehaviour instance;
@@ -66,7 +62,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     private void Start()
     {
-        StartCoroutine(DownloadCSV());
+        StartCoroutine(ResponseDatabase.InitializeDatabases());
         typingSpeed = new WaitForSeconds(typeSpeed);
         AttachmentModeActive(false);
     }
@@ -77,22 +73,26 @@ public class ChatAPTBehaviour : MonoBehaviour
             SubmitResponse();
             inputField.ActivateInputField();
         }
-        if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P))
         {
-            foreach(KeyValuePair<string, Response> response in responsesDB)
+            foreach(KeyValuePair<string, Response> response in ResponseDatabase.ResponsesDB)
             {
                 string debug = "";
 
-                debug += response.Key + " " + response.Value.keywords.Count + " " + response.Value.unlocksResponse + "\n";
+                debug += response.Key + " " + response.Value.keywords.Count + "\n";
+                foreach (string str in response.Value.unlocksResponse)
+                {
+                    debug += str + ",";
+                }
+                debug += "\n";
                 foreach(string keyword in response.Value.keywords)
                 {
-                    debug += keyword + "\n";
+                    debug += keyword + ", ";
                 }
                 debug += response.Value.response + " " + response.Value.isUnlocked;
                 Debug.Log(debug);
             }
         }
-        if (Input.GetKeyDown(KeyCode.O)) Debug.Log(csvData);
         //if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
     }
     #region Response System
@@ -137,7 +137,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         }
 
         //If no exact responses, look for a most matched response
-        foreach (KeyValuePair<string, Response> response in responsesDB)
+        foreach (KeyValuePair<string, Response> response in ResponseDatabase.ResponsesDB)
         {
             int responseWeight = 0; //Initialize the weight
             if (!response.Value.isUnlocked) continue; //Skip response if its not unlocked
@@ -165,7 +165,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         string tempInput = input.ToLower().Replace(' ', '@');
 
-        foreach(KeyValuePair <string, Response> response in responsesDB)
+        foreach(KeyValuePair <string, Response> response in ResponseDatabase.ResponsesDB)
         {
             if (response.Value.keywords.Contains(tempInput))
             {
@@ -179,7 +179,18 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     private void Respond(Response response)
     {
-        if (response.unlocksResponse != "") responsesDB[response.unlocksResponse].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
+        foreach (KeyValuePair<string, Response> kvp in ResponseDatabase.ResponsesDB)
+        {
+            if(response == kvp.Value) Debug.Log($"Responding with {kvp.Key}");
+        }
+
+        if (response.unlocksResponse.Length > 0)
+        {
+            foreach (string unlock in response.unlocksResponse)
+            {
+                ResponseDatabase.ResponsesDB[unlock].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
+            }
+        }
         CreateTextEntry(ChatEntity.ChatAPT, response.response);
     }
     private IEnumerator TypingEffect(TextMeshProUGUI text, string textToType)
@@ -191,32 +202,6 @@ public class ChatAPTBehaviour : MonoBehaviour
             text.text += c;
             yield return typingSpeed;
             scrollRect.verticalNormalizedPosition = 0;
-        }
-    }
-    public IEnumerator DownloadCSV()
-    {
-        UnityWebRequest webRequest = UnityWebRequest.Get("https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?format=csv");
-
-        yield return webRequest.SendWebRequest();
-
-        if (webRequest.result == UnityWebRequest.Result.Success)
-        {
-            //On CSV downloaded
-            csvData = webRequest.downloadHandler.text;
-            Debug.Log("CSV Downloaded Successfully!");
-
-            string[] data = csvData.Split("\r\n"); 
-
-            for(int i = 1; i < data.Length; i++)
-            {
-                string[] values = data[i].Split(',');
-
-                responsesDB.Add(values[0], new Response(values[1].Split(' '), values[2], values[3], values[0][0] == 'U'));
-            }
-        }
-        else
-        {
-            Debug.LogError($"Failed to download CSV: {webRequest.error}");
         }
     }
     #endregion
@@ -238,25 +223,4 @@ public class ChatAPTBehaviour : MonoBehaviour
         attachmentBackground.SetActive(state);
     }
     #endregion
-}
-[System.Serializable]
-public class Response
-{
-    public HashSet<string> keywords = new HashSet<string>();
-    public string response;
-    public string unlocksResponse;
-    public bool isUnlocked;
-
-    public Response(string[] keywords, string response, string unlocksResponse, bool isUnlocked)
-    {
-        string[] tempKeywords = new string[keywords.Length];
-        for (int i = 0; i < tempKeywords.Length; i++)
-        {
-            this.keywords.Add(keywords[i].ToLower());
-        }
-
-        this.response = response;
-        this.unlocksResponse = unlocksResponse;
-        this.isUnlocked = isUnlocked;
-    }
 }
