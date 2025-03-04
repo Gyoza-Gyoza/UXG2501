@@ -62,7 +62,8 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     private void Start()
     {
-        StartCoroutine(ResponseDatabase.InitializeDatabases());
+        StartCoroutine(ResponseDatabase.GetDatabase("https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=0&format=csv", 
+            result => ResponseDatabase.ResponsesDB = ResponseDatabase.ParseCSV(result)));
         typingSpeed = new WaitForSeconds(typeSpeed);
         AttachmentModeActive(false);
     }
@@ -96,6 +97,16 @@ public class ChatAPTBehaviour : MonoBehaviour
         //if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
     }
     #region Response System
+    public void SubmitResponse()
+    {
+        if (inputField.text == "") return;
+        userInput = inputField.text; //Store the text 
+        inputField.text = ""; //Clears the text 
+
+        CreateTextEntry(ChatEntity.User, userInput);
+        SelectResponse(userInput);
+        SetAttachmentPopUpActive(false);
+    }
     private void CreateTextEntry(ChatEntity texter, string text)
     {
         GameObject textPrefab = null;
@@ -112,24 +123,17 @@ public class ChatAPTBehaviour : MonoBehaviour
                 break;
         }
     }
-    public void SubmitResponse()
-    {
-        if (inputField.text == "") return;
-        userInput = inputField.text; //Store the text 
-        inputField.text = ""; //Clears the text 
-
-        CreateTextEntry(ChatEntity.User, userInput);
-        SelectResponse(userInput);
-        SetAttachmentPopUpActive(false);
-    }
-    private void SelectResponse(string input)
+    private void SelectResponse(string input) //Response process 
     {
         string[] userInput = input.ToLower().Split(' ');
 
         Response selectedResponse;
         int highestWeight = 0;
 
-        //Check for exact responses first 
+        //Check for phase responses 
+        
+
+        //Check for exact responses
         if (CheckExact(input, out selectedResponse))
         {
             Respond(selectedResponse);

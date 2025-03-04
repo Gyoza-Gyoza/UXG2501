@@ -1,43 +1,54 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public static class ResponseDatabase
 {
     public static Dictionary<string, Response> ResponsesDB
-    { get; private set; } = new Dictionary<string, Response>();
+    { get; set; } = new Dictionary<string, Response>();
 
-    private static StreamReader sr;
     private static string csvData;
 
-    public static IEnumerator InitializeDatabases()
+    public static IEnumerator GetDatabase(string link, Action<string> callback)
     {
-        UnityWebRequest webRequest = UnityWebRequest.Get("https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?format=csv");
+        UnityWebRequest webRequest = UnityWebRequest.Get(link);
 
         yield return webRequest.SendWebRequest();
 
         if (webRequest.result == UnityWebRequest.Result.Success)
         {
-            //On CSV downloaded
-            csvData = webRequest.downloadHandler.text;
-            Debug.Log("CSV Downloaded Successfully!");
+            ////On CSV downloaded
+            //csvData = webRequest.downloadHandler.text;
 
-            string[] data = csvData.Split("\r\n");
+            //string[] data = csvData.Split("\r\n");
 
-            for (int i = 1; i < data.Length; i++)
-            {
-                string[] values = data[i].Split(',');
+            //for (int i = 1; i < data.Length; i++)
+            //{
+            //    string[] values = data[i].Split(',');
 
-                ResponsesDB.Add(values[0], new Response(values[1].Split(' '), values[2].Replace('#', ','), values[3], values[0][0] == 'U'));
-            }
+            //    ResponsesDB.Add(values[0], new Response(values[1].Split(' '), values[2].Replace('#', ','), values[3], values[0][0] == 'U'));
+            //}
+            callback?.Invoke(webRequest.downloadHandler.text);
         }
         else
         {
             Debug.LogError($"Failed to download CSV: {webRequest.error}");
         }
+    }
+    public static Dictionary<string, Response> ParseCSV(string csv)
+    {
+        string[] data = csv.Split("\r\n");
+        Dictionary<string, Response> result = new Dictionary<string, Response >();
+
+        for (int i = 1; i < data.Length; i++)
+        {
+            string[] values = data[i].Split(',');
+
+            result.Add(values[0], new Response(values[1].Split(' '), values[2].Replace('#', ','), values[3], values[0][0] == 'U'));
+        }
+        return result;
     }
 }
 
