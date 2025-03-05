@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8470955068732155542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8208730204400745575}
+  - component: {fileID: 1214034579453881631}
+  m_Layer: 0
+  m_Name: QuizManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8208730204400745575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470955068732155542}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 899.3552, y: 488.65, z: 7.2789445}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1214034579453881631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8470955068732155542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1c7ee7297d07944f99134339e708f66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moodleWindow: {fileID: 0}
+  moodleIcon: {fileID: 0}
+  closeButton: {fileID: 0}
+  introPage: {fileID: 0}
+  quizPage: {fileID: 0}
+  summaryPage: {fileID: 0}
+  scorePage: {fileID: 0}
+  questionNumber: {fileID: 0}
+  questionText: {fileID: 0}
+  questions:
+  - questionNumber: Question 1
+    questionText: Given that the year is 2056 and US and China are at war. What is
+      the color of the sky, 3pm on a rainy afternoon?
+    answers:
+    - A) Blue
+    - B) Yellow
+    - C) Grass
+    - D) Lebron James
+  - questionNumber: Question 2
+    questionText: "Now granted the gravity on Mar's is 3.73 m/s\xB2. Riddle me this,
+      how heavy is Lebron James' Mother?"
+    answers:
+    - A) 20kg
+    - B) 10000g
+    - C) 5 Elephants
+    - D) The Moon
+  answerOptions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  questionBackButton: {fileID: 0}
+  answerButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  submitButton: {fileID: 0}
+  submitButtonImage: {fileID: 0}
+  submitedEnabled: {fileID: 21300000, guid: 63e5fe4755ea3a745b0b051bbdfd5281, type: 3}
+  submitedDisabled: {fileID: 21300000, guid: 8abc8eb1005de29499f91d74f170625c, type: 3}
+  summaryText: {fileID: 0}
+  backButton: {fileID: 0}
+  finishButton: {fileID: 0}
+  restartButton: {fileID: 0}
