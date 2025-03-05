@@ -68,6 +68,7 @@ public class Phase
     protected Phase currentPhase; 
     public Phase()
     {
+        PhaseResponses = PhaseManager.Instance.Phases[GetType()];
         currentPhase = PhaseManager.Instance.CurrentPhase;
     }
     public virtual Response GetResponse(string input)
@@ -109,7 +110,6 @@ public class SubmitAssignment : Phase //Phase 1.1
 {
     public SubmitAssignment(string input)
     {
-        PhaseResponses = PhaseManager.Instance.Phases[GetType()];
         GetResponse(input);
     }
     public override Response GetResponse(string input)
