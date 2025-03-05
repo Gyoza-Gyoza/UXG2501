@@ -3263,6 +3263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Moodle Window
       objectReference: {fileID: 0}
+    - target: {fileID: 8633062252285893843, guid: 43ce153bd46a6f1409ec0bef4eddac39, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

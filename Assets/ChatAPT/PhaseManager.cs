@@ -26,8 +26,8 @@ public class PhaseManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y)) Debug.Log(CurrentPhase);
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.Equals)) Debug.Log("Current Phase: " + CurrentPhase);
+        if (Input.GetKeyDown(KeyCode.Minus))
         {
             if(CurrentPhase == null) Debug.Log("Null");
             CurrentPhase = new Experimentation();
