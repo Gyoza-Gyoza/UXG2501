@@ -55,9 +55,11 @@ public class PhaseManager : MonoBehaviour
     }
     private void InitializeDatabase(Type type, string link)
     {
+        LoadingManager.LoadDatabase();
         StartCoroutine(DatabaseHandler.GetDatabase(link, result =>
             {
                 Phases.Add(type, DatabaseHandler.ParseCSV(result));
+                LoadingManager.DatabaseLoaded();
             }));
     }
 }

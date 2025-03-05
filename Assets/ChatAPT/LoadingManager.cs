@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoadingManager : MonoBehaviour
+public static class LoadingManager 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private static int databaseCount; 
+    private static int databaseLoaded; 
 
-    // Update is called once per frame
-    void Update()
+    public static void LoadDatabase()
     {
-        
+        databaseCount++; 
+    }
+    public static bool DatabaseLoaded()
+    {
+        databaseLoaded++;
+
+        if (databaseLoaded >= databaseCount)
+        {
+            PhaseManager.Instance.CurrentPhase = new Experimentation();
+            return true;
+        }
+        else return false;
     }
 }
