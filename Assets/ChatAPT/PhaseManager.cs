@@ -9,11 +9,11 @@ public class PhaseManager : MonoBehaviour
     public Dictionary<Type, Dictionary<string, Response>> Phases
     { get; private set; } = new Dictionary<Type, Dictionary<string, Response>>();
     public Phase CurrentPhase
-    { get; private set; }
-    public static PhaseManager instance;
+    { get; set; }
+    public static PhaseManager Instance;
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (Instance == null) Instance = this;
     }
     private void Start()
     {
@@ -21,22 +21,20 @@ public class PhaseManager : MonoBehaviour
     }
     private void InitializePhases()
     {
-        StartCoroutine(ResponseDatabase.GetDatabase("https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=40104871&format=csv", 
-            result =>
-            {
-                Phases.Add(typeof(Trust), ResponseDatabase.ParseCSV(result));
-                CurrentPhase = new Trust(this);
-            }));
+        InitializeDatabase(typeof(Experimentation), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=0&format=csv");
+        InitializeDatabase(typeof(SubmitAssignment), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=40104871&format=csv");
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Y)) Debug.Log(CurrentPhase);
         if (Input.GetKeyDown(KeyCode.U))
         {
-            Debug.Log(CurrentPhase.phaseResponses.Count);
+            if(CurrentPhase == null) Debug.Log("Null");
+            CurrentPhase = new Experimentation();
         }
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.O))
         {
-            foreach (KeyValuePair<string, Response> response in CurrentPhase.phaseResponses)
+            foreach (KeyValuePair<string, Response> response in CurrentPhase.PhaseResponses)
             {
                 string debug = "";
 
@@ -55,58 +53,85 @@ public class PhaseManager : MonoBehaviour
             }
         }
     }
+    private void InitializeDatabase(Type type, string link)
+    {
+        StartCoroutine(DatabaseHandler.GetDatabase(link, result =>
+            {
+                Phases.Add(type, DatabaseHandler.ParseCSV(result));
+            }));
+    }
 }
 
-public abstract class Phase
+public class Phase
 {
-    public Dictionary<string, Response> phaseResponses
+    public Dictionary<string, Response> PhaseResponses
     { get; protected set; }
-    protected PhaseManager phaseManager;
-    public enum SubPhases
+    protected Phase currentPhase; 
+    public Phase()
     {
-        SubmitAsg, 
-        ChangeBG, 
-        DeleteBin
+        PhaseResponses = PhaseManager.Instance.Phases[GetType()];
+        Debug.Log($"Switching to {GetType()} phase");
     }
-    public Phase(PhaseManager phaseManager)
+    public virtual Response GetResponse(string input)
     {
-        this.phaseManager = phaseManager;
+        throw new NotImplementedException();
     }
-    public abstract void CompleteCondition(SubPhases state);
+    public virtual void OnAttach()
+    {
+        throw new NotImplementedException();
+    }
 }
-public class Trust : Phase
+//public class ProblemSolving : Phase
+//{
+//    public ProblemSolving(ChatAPTBehaviour chatAPTBehaviour) : base(chatAPTBehaviour)
+//    {
+//        this.chatAPTBehaviour = chatAPTBehaviour;
+//        phaseResponses = PhaseManager.instance.Phases[GetType()];
+//    }
+//    public override void CompleteCondition(Phase nextPhase)
+//    {
+
+//    }
+//}
+public class Experimentation : Phase //Phase 0
 {
-    public Trust(PhaseManager phaseManager) : base(phaseManager)
+    public override Response GetResponse(string input)
     {
-        this.phaseManager = phaseManager;
-        phaseResponses = phaseManager.Phases[GetType()];
-    }
-    public override void CompleteCondition(SubPhases state)
-    {
-        switch(state)
+        if(ChatAPTBehaviour.Instance.Attachment != null)
         {
-            case SubPhases.SubmitAsg:
-                break;
-            case SubPhases.ChangeBG:
-                break;
-            case SubPhases.DeleteBin:
-                break;
+            return null;
+        }
+        else
+        {
+            return ResponseHandler.SearchKeywords(input);
         }
     }
+    public override void OnAttach()
+    {
+        PhaseManager.Instance.CurrentPhase = new SubmitAssignment();
+    }
 }
-public class ProblemSolving : Phase
+public class SubmitAssignment : Phase //Phase 1.1
 {
-    public ProblemSolving(PhaseManager phaseManager) : base(phaseManager)
+    public SubmitAssignment()
     {
-        this.phaseManager = phaseManager; 
-        phaseResponses = phaseManager.Phases[GetType()];
+        
     }
-    public override void CompleteCondition(SubPhases state)
+    public override Response GetResponse(string input)
     {
-
+        Response result;
+        if (ChatAPTBehaviour.Instance.Attachment.tag == "Assignment")
+        {
+            result = ResponseHandler.SearchKeywords(input);
+        }
+        else
+        {
+            result = PhaseResponses["U0000004"];
+            PhaseManager.Instance.CurrentPhase = new Experimentation();
+        }
+        return result;
     }
 }
-
 //Class to store information about the phase behaviour and reference to the phase specific response database 
 //Way to define what phase the action will complete 
 
@@ -179,7 +204,5 @@ public class ProblemSolving : Phase
 //    }
 //}
 
-//Check for subphase state 
-//If its in that state and the action is performed, complete the condition and move to the next phase 
-//Don't check all the time so that the conditions can't be completed prematurely 
-//Can events be used? 
+//Phase 0, players talk and experiment with the bot 
+//Phase 1 starts when the player attaches the assignment
