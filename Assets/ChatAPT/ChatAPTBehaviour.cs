@@ -101,8 +101,11 @@ public class ChatAPTBehaviour : MonoBehaviour
         inputField.text = ""; //Clears the text 
 
         CreateTextEntry(ChatEntity.User, userInput);
-        Respond(PhaseManager.Instance.CurrentPhase.GetResponse(userInput));
-        //SelectResponse(userInput);
+        Response response = PhaseManager.Instance.CurrentPhase.GetResponse(userInput);
+
+        if (response != null) Respond(response);
+        else Respond(ResponseHandler.GetInvalidResponse());
+
         SetAttachmentPopUpActive(false);
     }
     private void CreateTextEntry(ChatEntity texter, string text)
@@ -157,12 +160,16 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     public void AttachObject(DraggableObject attachment)
     {
-        this.Attachment = attachment;
+        Attachment = attachment;
         attachmentImage.GetComponentInChildren<Image>().sprite = attachment.GetComponent<Image>().sprite;
         SetAttachmentPopUpActive(true);
+        //if (PhaseManager.Instance.CurrentPhase is Experimentation) PhaseManager.Instance.CurrentPhase = new SubmitAssignment();
+        PhaseManager.Instance.CurrentPhase.OnAttach();
     }
     public void SetAttachmentPopUpActive(bool state)
     {
+        if (!state) Attachment = null;
+
         attachmentImage.gameObject.SetActive(state);
         attachmentBackground.SetActive(state);
     }

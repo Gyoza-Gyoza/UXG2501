@@ -39,11 +39,12 @@ public static class ResponseHandler
             if (responseWeight >= highestWeight) selectedResponse = response.Value;
         }
 
-        //If there are no matches, respond with a random invalid response
-        if (selectedResponse == null) selectedResponse = invalidInputResponses[Random.Range(0, invalidInputResponses.Length)];
-
         //Respond with the selected response
         return selectedResponse;
+    }
+    public static Response GetInvalidResponse()
+    {
+        return invalidInputResponses[Random.Range(0, invalidInputResponses.Length)];
     }
     private static bool CheckExact(string input, out Response foundResponse)
     {

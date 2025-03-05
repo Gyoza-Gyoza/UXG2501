@@ -1714,16 +1714,6 @@ MonoBehaviour:
   userInputGO: {fileID: 487324175}
   chatAPTTextBox: {fileID: 0}
   typeSpeed: 0.01
-  invalidInputResponse:
-  - response: Sorry I don't understand that
-    unlocksResponse: []
-    isUnlocked: 1
-  - response: Can you try something else
-    unlocksResponse: []
-    isUnlocked: 1
-  - response: I understand basketball but not that
-    unlocksResponse: []
-    isUnlocked: 1
   chatAPTTextPrefab: {fileID: 7785597433619719133, guid: 76a2eac42ac351d46be69e78afc90722, type: 3}
   userTextPrefab: {fileID: 7785597433619719133, guid: 055281a593e724349a9f4dbfc1f43ff1, type: 3}
   chatContent: {fileID: 702036524}
@@ -1787,7 +1777,7 @@ GameObject:
   - component: {fileID: 1194853982}
   m_Layer: 5
   m_Name: ChatAPT
-  m_TagString: Untagged
+  m_TagString: Assignment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

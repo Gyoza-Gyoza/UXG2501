@@ -26,6 +26,7 @@ public class PhaseManager : MonoBehaviour
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Y)) Debug.Log(CurrentPhase);
         if (Input.GetKeyDown(KeyCode.U))
         {
             if(CurrentPhase == null) Debug.Log("Null");
@@ -69,9 +70,13 @@ public class Phase
     public Phase()
     {
         PhaseResponses = PhaseManager.Instance.Phases[GetType()];
-        currentPhase = PhaseManager.Instance.CurrentPhase;
+        Debug.Log($"Switching to {GetType()} phase");
     }
     public virtual Response GetResponse(string input)
+    {
+        throw new NotImplementedException();
+    }
+    public virtual void OnAttach()
     {
         throw new NotImplementedException();
     }
@@ -94,7 +99,6 @@ public class Experimentation : Phase //Phase 0
     {
         if(ChatAPTBehaviour.Instance.Attachment != null)
         {
-            currentPhase = new SubmitAssignment(input);
             return null;
         }
         else
@@ -102,27 +106,30 @@ public class Experimentation : Phase //Phase 0
             return ResponseHandler.SearchKeywords(input);
         }
     }
+    public override void OnAttach()
+    {
+        PhaseManager.Instance.CurrentPhase = new SubmitAssignment();
+    }
 }
-//Send assignment 
-//Move to next phase 
-//Get response 
 public class SubmitAssignment : Phase //Phase 1.1
 {
-    public SubmitAssignment(string input)
+    public SubmitAssignment()
     {
-        GetResponse(input);
+        
     }
     public override Response GetResponse(string input)
     {
+        Response result;
         if (ChatAPTBehaviour.Instance.Attachment.tag == "Assignment")
         {
-            return PhaseResponses["U0000001"];
+            result = ResponseHandler.SearchKeywords(input);
         }
         else
         {
+            result = PhaseResponses["U0000004"];
             PhaseManager.Instance.CurrentPhase = new Experimentation();
-            return PhaseResponses["U0000001"];
         }
+        return result;
     }
 }
 //Class to store information about the phase behaviour and reference to the phase specific response database 
