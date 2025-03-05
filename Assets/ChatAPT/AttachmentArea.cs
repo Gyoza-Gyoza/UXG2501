@@ -8,13 +8,13 @@ public class AttachmentArea : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ChatAPTBehaviour.instance.InAttachmentArea = true;
+        ChatAPTBehaviour.Instance.InAttachmentArea = true;
         Debug.Log("In drop area");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        ChatAPTBehaviour.instance.InAttachmentArea = false;
+        ChatAPTBehaviour.Instance.InAttachmentArea = false;
         Debug.Log("Out drop area");
     }
 }

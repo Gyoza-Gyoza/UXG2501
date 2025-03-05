@@ -22,7 +22,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
-        ChatAPTBehaviour.instance.AttachmentModeActive(true);
+        ChatAPTBehaviour.Instance.AttachmentModeActive(true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -34,11 +34,11 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
-        ChatAPTBehaviour.instance.AttachmentModeActive(false);
+        ChatAPTBehaviour.Instance.AttachmentModeActive(false);
 
-        if (ChatAPTBehaviour.instance.InAttachmentArea)
+        if (ChatAPTBehaviour.Instance.InAttachmentArea)
         {
-            ChatAPTBehaviour.instance.AttachObject(this);
+            ChatAPTBehaviour.Instance.AttachObject(this);
             rectTransform.anchoredPosition = originalPos;
         }
 

@@ -20,9 +20,6 @@ public class ChatAPTBehaviour : MonoBehaviour
     private float typeSpeed;
 
     [SerializeField]
-    private Response[] invalidInputResponse;
-
-    [SerializeField]
     private GameObject chatAPTTextPrefab, userTextPrefab;
 
     [SerializeField]
@@ -46,9 +43,11 @@ public class ChatAPTBehaviour : MonoBehaviour
     private TMP_InputField inputField;
     private string userInput;
     private WaitForSeconds typingSpeed;
-    private DraggableObject attachment;
+    public DraggableObject Attachment
+    { get; private set; }
 
-    public static ChatAPTBehaviour instance;
+    public static ChatAPTBehaviour Instance
+    { get; private set; }
 
     private enum ChatEntity
     {
@@ -58,12 +57,10 @@ public class ChatAPTBehaviour : MonoBehaviour
     private void Awake()
     {
         inputField = userInputGO.GetComponent<TMP_InputField>();
-        if (instance == null) instance = this;
+        if (Instance == null) Instance = this;
     }
     private void Start()
     {
-        StartCoroutine(ResponseDatabase.GetDatabase("https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=0&format=csv", 
-            result => ResponseDatabase.ResponsesDB = ResponseDatabase.ParseCSV(result)));
         typingSpeed = new WaitForSeconds(typeSpeed);
         AttachmentModeActive(false);
     }
@@ -76,7 +73,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         }
         if(Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P))
         {
-            foreach(KeyValuePair<string, Response> response in ResponseDatabase.ResponsesDB)
+            foreach(KeyValuePair<string, Response> response in PhaseManager.Instance.CurrentPhase.PhaseResponses)
             {
                 string debug = "";
 
@@ -104,7 +101,8 @@ public class ChatAPTBehaviour : MonoBehaviour
         inputField.text = ""; //Clears the text 
 
         CreateTextEntry(ChatEntity.User, userInput);
-        SelectResponse(userInput);
+        Respond(PhaseManager.Instance.CurrentPhase.GetResponse(userInput));
+        //SelectResponse(userInput);
         SetAttachmentPopUpActive(false);
     }
     private void CreateTextEntry(ChatEntity texter, string text)
@@ -123,76 +121,18 @@ public class ChatAPTBehaviour : MonoBehaviour
                 break;
         }
     }
-    private void SelectResponse(string input) //Response process 
-    {
-        string[] userInput = input.ToLower().Split(' ');
-
-        Response selectedResponse;
-        int highestWeight = 0;
-
-        //Check for phase responses 
-        
-
-        //Check for exact responses
-        if (CheckExact(input, out selectedResponse))
-        {
-            Respond(selectedResponse);
-            return;
-        }
-
-        //If no exact responses, look for a most matched response
-        foreach (KeyValuePair<string, Response> response in ResponseDatabase.ResponsesDB)
-        {
-            int responseWeight = 0; //Initialize the weight
-            if (!response.Value.isUnlocked) continue; //Skip response if its not unlocked
-
-            foreach (string word in userInput)
-            {
-                if (response.Value.keywords.Contains(word))
-                {
-                    responseWeight++;
-
-                    if (highestWeight < responseWeight) highestWeight = responseWeight;
-                }
-            }
-            if (responseWeight == 0) continue;
-            if (responseWeight >= highestWeight) selectedResponse = response.Value;
-        }
-
-        //If there are no matches, respond with a random invalid response
-        if (selectedResponse == null) selectedResponse = invalidInputResponse[Random.Range(0, invalidInputResponse.Length)];
-
-        //Respond with the selected response
-        Respond(selectedResponse);
-    }
-    private bool CheckExact(string input, out Response foundResponse)
-    {
-        string tempInput = input.ToLower().Replace(' ', '@');
-
-        foreach(KeyValuePair <string, Response> response in ResponseDatabase.ResponsesDB)
-        {
-            if (response.Value.keywords.Contains(tempInput))
-            {
-                if (!response.Value.isUnlocked) continue; //Skip response if its not unlocked
-                foundResponse = response.Value;
-                return true;
-            }
-        }
-        foundResponse = null;
-        return false;
-    }
     private void Respond(Response response)
     {
-        foreach (KeyValuePair<string, Response> kvp in ResponseDatabase.ResponsesDB)
+        foreach (KeyValuePair<string, Response> kvp in PhaseManager.Instance.CurrentPhase.PhaseResponses)
         {
-            if(response == kvp.Value) Debug.Log($"Responding with {kvp.Key}");
+            if (response == kvp.Value) Debug.Log($"Responding with {kvp.Key}");
         }
 
         if (response.unlocksResponse.Length > 0)
         {
             foreach (string unlock in response.unlocksResponse)
             {
-                ResponseDatabase.ResponsesDB[unlock].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
+                PhaseManager.Instance.CurrentPhase.PhaseResponses[unlock].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
             }
         }
         CreateTextEntry(ChatEntity.ChatAPT, response.response);
@@ -217,7 +157,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     public void AttachObject(DraggableObject attachment)
     {
-        this.attachment = attachment;
+        this.Attachment = attachment;
         attachmentImage.GetComponentInChildren<Image>().sprite = attachment.GetComponent<Image>().sprite;
         SetAttachmentPopUpActive(true);
     }

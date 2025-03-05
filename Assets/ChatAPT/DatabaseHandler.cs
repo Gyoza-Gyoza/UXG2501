@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public static class ResponseDatabase
+public static class DatabaseHandler
 {
-    public static Dictionary<string, Response> ResponsesDB
-    { get; set; } = new Dictionary<string, Response>();
-
     private static string csvData;
 
     public static IEnumerator GetDatabase(string link, Action<string> callback)
@@ -19,17 +16,6 @@ public static class ResponseDatabase
 
         if (webRequest.result == UnityWebRequest.Result.Success)
         {
-            ////On CSV downloaded
-            //csvData = webRequest.downloadHandler.text;
-
-            //string[] data = csvData.Split("\r\n");
-
-            //for (int i = 1; i < data.Length; i++)
-            //{
-            //    string[] values = data[i].Split(',');
-
-            //    ResponsesDB.Add(values[0], new Response(values[1].Split(' '), values[2].Replace('#', ','), values[3], values[0][0] == 'U'));
-            //}
             callback?.Invoke(webRequest.downloadHandler.text);
         }
         else
