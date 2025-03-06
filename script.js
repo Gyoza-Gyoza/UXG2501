@@ -10,6 +10,40 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    //----------------------------------- Change Images (Light to Dark) -----------------------------------------------
+
+    function changeTableImage() {
+        const imageContainer = document.getElementById("table-background"); //Ensure this ID exists in your HTML
+        if (imageContainer) {
+            imageContainer.src = "Build/Images/Table Dark.png"; //Change the image dynamically
+            console.log("✅ Image updated via MutationObserver.");
+        } else {
+            console.error("❌ Image container not found!");
+        }
+    }
+
+    function changeOverlayImage() {
+        const imageContainer = document.getElementById("overlay-image"); //Ensure this ID exists in your HTML
+        if (imageContainer) {
+            imageContainer.src = "Build/Images/Monitor Dark.png"; //Change the image dynamically
+            console.log("✅ Image updated via MutationObserver.");
+        } else {
+            console.error("❌ Image container not found!");
+        }
+    }
+
+    function changePostItImage() {
+        const imageContainer = document.getElementById("postit-note-1"); //Ensure this ID exists in your HTML
+        if (imageContainer) {
+            imageContainer.src = "Build/Images/Layer 2 Dark.png"; //Change the image dynamically
+            console.log("✅ Image updated via MutationObserver.");
+        } else {
+            console.error("❌ Image container not found!");
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
+
     // ✅ Add click event listener to button
     const button = document.getElementById("hideRecycleBinButton");
     if (button) {
@@ -23,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Starting MutationObserver for comment tracking...");
     let commentNode = null;
     document.body.childNodes.forEach((node) => {
-        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("Background Color")) {
+        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("ChatAPT Permission Level")) {
             commentNode = node;
         }
     });
@@ -31,7 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (commentNode) {
         const observer = new MutationObserver(() => {
             console.log(`📝 Comment changed: ${commentNode.nodeValue}`);
-            notifyUnity();
+            //notifyUnity();
+            changeTableImage();
+            changeOverlayImage();
+            changePostItImage();
         });
         observer.observe(commentNode, { characterData: true, subtree: true });
 

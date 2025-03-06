@@ -43,25 +43,13 @@ html, body {
 #postit-note-1 {
     position: absolute;
     top: 660px;
-    left: 400px;
-    width: 200px;
+    left: 430px;
+    width: 450px;
     height: auto;
-    aspect-ratio: 1100/1100;
+    aspect-ratio: 2766/1100;
     z-index: 10; /* Ensures it's on top */
     pointer-events: none; /* Allows interaction with Unity */
 }
-
-#postit-note-2 {
-    position: absolute;
-    top: 660px;
-    right: 600px;
-    width: 200px;
-    height: auto;
-    aspect-ratio: 1100/1100;
-    z-index: 10; /* Ensures it's on top */
-    pointer-events: none; /* Allows interaction with Unity */
-}
-
 
 /* Background Div (Color Changing) */
 #background-wallpaper {
@@ -76,12 +64,12 @@ html, body {
 
 /* Table Div */
 #table-background {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    object-fit: fill;
+    object-fit: cover;
     z-index: 0; /* Keeps it behind all content */
 }
 
@@ -106,5 +94,9 @@ html, body {
     
     #warning-message {
         display: block;
+    }
+
+    #table-background {
+        display: none;
     }
 }
