@@ -165,10 +165,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     private void Respond(Response response)
     {
-        foreach (KeyValuePair<string, Response> kvp in PhaseManager.Instance.CurrentPhase.PhaseResponses)
-        {
-            if (response == kvp.Value) Debug.Log($"Responding with {kvp.Key}");
-        }
+        DebugMode.Instance.SetResponse(response);
 
         if (response.unlocksResponse.Length > 0)
         {
