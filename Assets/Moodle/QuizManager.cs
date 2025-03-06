@@ -57,13 +57,39 @@ public class QuizManager : MonoBehaviour
     private int[] selectedAnswers;
 
 
+    //Double Click 
+    private float lastClickTime = 0f;
+    private float doubleClickThreshold = 0.3f; // Adjust based on preference
+
     void Start()
     {
+        moodleWindow.SetActive(false);
+        moodleIcon.onClick.AddListener(OnIconClick);
+        closeButton.onClick.AddListener(CloseMoodle);
+
+
         submitButton.onClick.AddListener(NextQuestion);
         backButton.onClick.AddListener(GoBack);
         questionBackButton.onClick.AddListener(GoBack);
         restartButton.onClick.AddListener(RestartQuiz);
         finishButton.onClick.AddListener(FinishQuiz);
+    }
+
+    public void OnIconClick()
+    {
+
+        float timeSinceLastClick = Time.time - lastClickTime;
+        lastClickTime = Time.time;
+
+        if (timeSinceLastClick <= doubleClickThreshold)
+        {
+            Debug.Log("Double Clicked");
+            OpenWindow();
+        }
+        else
+        {
+            Debug.Log("Single Clicked");
+        }
     }
 
     public void OpenWindow()
@@ -86,6 +112,10 @@ public class QuizManager : MonoBehaviour
             toggle.onValueChanged.AddListener(delegate { CheckAnswerSelection(); });
         }
         
+    }
+    public void CloseMoodle()
+    {
+        moodleWindow.SetActive(false);
     }
 
     public void CheckAnswerSelection()
