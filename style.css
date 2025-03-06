@@ -40,6 +40,29 @@ html, body {
     pointer-events: none; /* Allows interaction with Unity */
 }
 
+#postit-note-1 {
+    position: absolute;
+    top: 660px;
+    left: 400px;
+    width: 200px;
+    height: auto;
+    aspect-ratio: 1100/1100;
+    z-index: 10; /* Ensures it's on top */
+    pointer-events: none; /* Allows interaction with Unity */
+}
+
+#postit-note-2 {
+    position: absolute;
+    top: 660px;
+    right: 600px;
+    width: 200px;
+    height: auto;
+    aspect-ratio: 1100/1100;
+    z-index: 10; /* Ensures it's on top */
+    pointer-events: none; /* Allows interaction with Unity */
+}
+
+
 /* Background Div (Color Changing) */
 #background-wallpaper {
     position: fixed;
