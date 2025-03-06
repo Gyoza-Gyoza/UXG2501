@@ -199,10 +199,11 @@ public class ChatAPTBehaviour : MonoBehaviour
     }
     public void AttachObject(DraggableObject attachment)
     {
+        if (!attachment.canAttach) return; 
+
         Attachment = attachment;
         attachmentImage.GetComponentInChildren<Image>().sprite = attachment.GetComponent<Image>().sprite;
         SetAttachmentPopUpActive(true);
-        //if (PhaseManager.Instance.CurrentPhase is Experimentation) PhaseManager.Instance.CurrentPhase = new SubmitAssignment();
         PhaseManager.Instance.CurrentPhase.OnAttach();
     }
     public void SetAttachmentPopUpActive(bool state)

@@ -23,6 +23,7 @@ public class PhaseManager : MonoBehaviour
     {
         InitializeDatabase(typeof(Experimentation), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=0&format=csv");
         InitializeDatabase(typeof(SubmitAssignment), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=40104871&format=csv");
+        InitializeDatabase(typeof(AssignmentSolving), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=1855310741&format=csv");
     }
     private void Update()
     {
@@ -76,25 +77,13 @@ public class Phase
     }
     public virtual Response GetResponse(string input)
     {
-        throw new NotImplementedException();
+        return ResponseHandler.SearchKeywords(input);
     }
     public virtual void OnAttach()
     {
         throw new NotImplementedException();
     }
 }
-//public class ProblemSolving : Phase
-//{
-//    public ProblemSolving(ChatAPTBehaviour chatAPTBehaviour) : base(chatAPTBehaviour)
-//    {
-//        this.chatAPTBehaviour = chatAPTBehaviour;
-//        phaseResponses = PhaseManager.instance.Phases[GetType()];
-//    }
-//    public override void CompleteCondition(Phase nextPhase)
-//    {
-
-//    }
-//}
 public class Experimentation : Phase //Phase 0
 {
     public override Response GetResponse(string input)
@@ -113,7 +102,7 @@ public class Experimentation : Phase //Phase 0
         PhaseManager.Instance.CurrentPhase = new SubmitAssignment();
     }
 }
-public class SubmitAssignment : Phase //Phase 1.1
+public class SubmitAssignment : Phase //Phase 0.1
 {
     public SubmitAssignment()
     {
@@ -125,6 +114,7 @@ public class SubmitAssignment : Phase //Phase 1.1
         if (ChatAPTBehaviour.Instance.Attachment.tag == "Assignment")
         {
             result = ResponseHandler.SearchKeywords(input);
+            PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
         }
         else
         {
@@ -132,6 +122,13 @@ public class SubmitAssignment : Phase //Phase 1.1
             PhaseManager.Instance.CurrentPhase = new Experimentation();
         }
         return result;
+    }
+}
+public class AssignmentSolving : Phase //Phase 1
+{
+    public AssignmentSolving()
+    {
+        
     }
 }
 //Class to store information about the phase behaviour and reference to the phase specific response database 

@@ -407,6 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 0
 --- !u!225 &196449267
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1586,6 +1587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 0
 --- !u!225 &925834337
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1909,6 +1911,7 @@ GameObject:
   - component: {fileID: 1223531205}
   - component: {fileID: 1223531204}
   - component: {fileID: 1223531203}
+  - component: {fileID: 1223531207}
   m_Layer: 5
   m_Name: Assignment Icon
   m_TagString: Assignment
@@ -1959,6 +1962,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 1
 --- !u!114 &1223531205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1997,6 +2001,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223531201}
   m_CullTransparentMesh: 1
+--- !u!114 &1223531207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223531201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1223531205}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1359598781
 GameObject:
   m_ObjectHideFlags: 0
@@ -2443,6 +2491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 0
 --- !u!225 &1679027390
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2768,6 +2817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 0
 --- !u!225 &2025975620
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2845,6 +2895,7 @@ GameObject:
   - component: {fileID: 2076905539}
   - component: {fileID: 2076905541}
   - component: {fileID: 2076905542}
+  - component: {fileID: 2076905543}
   m_Layer: 5
   m_Name: Recycle Bin Icon
   m_TagString: Untagged
@@ -2921,6 +2972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 1
 --- !u!225 &2076905542
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2933,6 +2985,50 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2076905543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076905537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2076905539}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &31441968387146342
 GameObject:
   m_ObjectHideFlags: 0
@@ -2963,6 +3059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 1
 --- !u!1 &91105794004372475
 GameObject:
   m_ObjectHideFlags: 0
@@ -3912,6 +4009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 0
 --- !u!222 &2026673134396512026
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4206,6 +4304,7 @@ GameObject:
   - component: {fileID: 700486502876053940}
   - component: {fileID: 68967959888887614}
   - component: {fileID: 1854962137}
+  - component: {fileID: 8836774668657052339}
   m_Layer: 5
   m_Name: Moodle Icon
   m_TagString: Untagged
@@ -5530,6 +5629,7 @@ GameObject:
   - component: {fileID: 7419620647644758915}
   - component: {fileID: 8050866675998293257}
   - component: {fileID: 8050866675998293258}
+  - component: {fileID: 8050866675998293259}
   m_Layer: 5
   m_Name: ChatAPT Icon
   m_TagString: Untagged
@@ -7433,6 +7533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dd3b8e54c981b342ae93463a1b02bea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAttach: 1
 --- !u!225 &8050866675998293258
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -7445,6 +7546,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &8050866675998293259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5473203338408753334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fa2a97c364a0f46a97a87ccf8e43d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetWindow: {fileID: 2025975615}
+  closeButton: {fileID: 141946641}
 --- !u!224 &8126351924096647733
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7920,6 +8035,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2646938009583417985}
   m_CullTransparentMesh: 1
+--- !u!114 &8836774668657052339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2646938009583417985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fa2a97c364a0f46a97a87ccf8e43d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetWindow: {fileID: 5893226461731115630}
+  closeButton: {fileID: 4513322619776131238}
 --- !u!114 &8956454916976086070
 MonoBehaviour:
   m_ObjectHideFlags: 0

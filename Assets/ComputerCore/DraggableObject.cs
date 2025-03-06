@@ -10,6 +10,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private CanvasGroup canvasGroup;
     private Canvas canvas;
     private Vector2 originalPos;
+    public bool canAttach;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -35,9 +36,10 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
         ChatAPTBehaviour.Instance.AttachmentModeActive(false);
-
+        ChatAPTBehaviour chatAPTBehaviour = GetComponentInParent<ChatAPTBehaviour>();
         if (ChatAPTBehaviour.Instance.InAttachmentArea)
         {
+            //Its registering itself
             ChatAPTBehaviour.Instance.AttachObject(this);
             rectTransform.anchoredPosition = originalPos;
         }
