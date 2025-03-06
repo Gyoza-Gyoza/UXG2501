@@ -16,11 +16,6 @@ public class QuizManager : MonoBehaviour
         public string[] answers; // A, B, C, D
     }
 
-    [Header("UI")]
-    public GameObject moodleWindow;
-    public Button moodleIcon;
-    public Button closeButton;
-
     [Header("Screens")]
     public GameObject introPage;
     public GameObject quizPage;
@@ -68,8 +63,6 @@ public class QuizManager : MonoBehaviour
 
     public void OpenWindow()
     {
-        moodleWindow.SetActive(true);
-
         //Show Intro Page and hide the other pages
         introPage.SetActive(true);
         quizPage.SetActive(false);
@@ -217,5 +210,9 @@ public class QuizManager : MonoBehaviour
         quizPage.SetActive(false);
         summaryPage.SetActive(false);
         introPage.SetActive(true);
+    }
+    private void OnEnable()
+    {
+        OpenWindow();
     }
 }
