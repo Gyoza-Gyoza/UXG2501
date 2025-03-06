@@ -8,7 +8,7 @@ public static class ResponseHandler
     {
         new Response(new string[0], "Sorry I don't understand that", "", true),
         new Response(new string[0], "Can you try something else", "", true),
-        new Response(new string[0], "I understand basketball but not that", "", true)
+        new Response(new string[0], "I understand but not I don't know", "", true)
     };
     public static Response SearchKeywords(string input) //Response process 
     {

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("📤 Sending message to Unity: HideRecycleBin");
 
         if (window.unityInstance) {
-            window.unityInstance.SendMessage("WebGLInteraction", "ReceiveMessage", "HideRecycleBin");
+            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "HideRecycleBin");
             console.log("✅ Successfully sent message to Unity!");
         }
     }
