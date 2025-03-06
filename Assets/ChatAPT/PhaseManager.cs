@@ -8,8 +8,17 @@ public class PhaseManager : MonoBehaviour
     //Use events to keep track of the databases availability for loading later
     public Dictionary<Type, Dictionary<string, Response>> Phases
     { get; private set; } = new Dictionary<Type, Dictionary<string, Response>>();
+    private Phase currentPhase;
     public Phase CurrentPhase
-    { get; set; }
+    {
+        get { return currentPhase; }
+        set 
+        {
+            DebugMode.Instance.SetCurrentPhase(value);
+            currentPhase = value; 
+        }
+    }
+
     public static PhaseManager Instance;
     private void Awake()
     {
@@ -69,11 +78,9 @@ public class Phase
 {
     public Dictionary<string, Response> PhaseResponses
     { get; protected set; }
-    protected Phase currentPhase; 
     public Phase()
     {
         PhaseResponses = PhaseManager.Instance.Phases[GetType()];
-        Debug.Log($"Switching to {GetType()} phase");
     }
     public virtual Response GetResponse(string input)
     {
@@ -81,7 +88,7 @@ public class Phase
     }
     public virtual void OnAttach()
     {
-        throw new NotImplementedException();
+
     }
 }
 public class Experimentation : Phase //Phase 0
