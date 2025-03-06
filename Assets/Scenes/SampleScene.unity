@@ -2221,7 +2221,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40.97998, y: -164}
+  m_AnchoredPosition: {x: 52.98001, y: -180}
   m_SizeDelta: {x: 176, y: 177}
   m_Pivot: {x: 0, y: 1}
 --- !u!225 &1223531203
@@ -2863,8 +2863,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -0.25195312}
-  m_SizeDelta: {x: 900, y: 36}
+  m_AnchoredPosition: {x: 0, y: -5.0000153}
+  m_SizeDelta: {x: 900, y: 53}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1826537927
 MonoBehaviour:
@@ -3244,7 +3244,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 41, y: -54}
+  m_AnchoredPosition: {x: 53, y: -70}
   m_SizeDelta: {x: 176, y: 177}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2076905539
@@ -4552,7 +4552,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -365.72, y: -33}
+  m_AnchoredPosition: {x: -353.71997, y: -49.00001}
   m_SizeDelta: {x: 176, y: 176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2401190601216064559
@@ -8017,11 +8017,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fa2a97c364a0f46a97a87ccf8e43d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetWindow: {fileID: 2025975615}
-  closeButton: {fileID: 141946641}
-  button: {fileID: 0}
-  lastClickTime: 0
-  doubleClickThreshold: 0.3
 --- !u!224 &8126351924096647733
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8038,7 +8033,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -365.72, y: -138}
+  m_AnchoredPosition: {x: -353.71997, y: -154}
   m_SizeDelta: {x: 176, y: 173}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8158011394235636965
@@ -8509,11 +8504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fa2a97c364a0f46a97a87ccf8e43d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetWindow: {fileID: 5893226461731115630}
-  closeButton: {fileID: 4513322619776131238}
-  button: {fileID: 0}
-  lastClickTime: 0
-  doubleClickThreshold: 0.3
 --- !u!114 &8956454916976086070
 MonoBehaviour:
   m_ObjectHideFlags: 0

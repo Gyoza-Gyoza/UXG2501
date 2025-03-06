@@ -65,10 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (commentNode) {
         const observer = new MutationObserver(() => {
             console.log(`📝 Comment changed: ${commentNode.nodeValue}`);
-            //notifyUnity();
-            changeTableImage();
-            changeOverlayImage();
-            changePostItImage();
+            notifyUnity();
+            // changeTableImage();
+            // changeOverlayImage();
+            // changePostItImage();
         });
         observer.observe(commentNode, { characterData: true, subtree: true });
 
