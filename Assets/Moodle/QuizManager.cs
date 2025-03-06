@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Packages.Rider.Editor.UnitTesting;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -85,7 +84,7 @@ public class QuizManager : MonoBehaviour
         if (timeSinceLastClick <= doubleClickThreshold)
         {
             Debug.Log("Double Clicked");
-            StartMoodle();
+            OpenWindow();
         }
         else
         {
@@ -93,7 +92,7 @@ public class QuizManager : MonoBehaviour
         }
     }
 
-    public void StartMoodle()
+    public void OpenWindow()
     {
         moodleWindow.SetActive(true);
 

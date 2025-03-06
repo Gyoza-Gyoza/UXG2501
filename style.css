@@ -71,7 +71,18 @@ html, body {
     width: 100vw;
     height: 100vh;
     background-color: #dc1c1c; /* Default color */
-    z-index: -1; /* Keeps it behind all content */
+    z-index: -2; /* Keeps it behind all content */
+}
+
+/* Table Div */
+#table-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: fill;
+    z-index: 0; /* Keeps it behind all content */
 }
 
 /* Mobile Breakpoint - Show Warning Instead */

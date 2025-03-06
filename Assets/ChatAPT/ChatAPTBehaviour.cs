@@ -54,6 +54,14 @@ public class ChatAPTBehaviour : MonoBehaviour
         ChatAPT, 
         User
     }
+
+    //Hide Window (Dylan)
+    public GameObject chatScreen;
+    public Button chatIcon;
+    public Button closeButton;
+    private float lastClickTime = 0f;
+    private float doubleClickThreshold = 0.3f; // Adjust based on preference
+
     private void Awake()
     {
         inputField = userInputGO.GetComponent<TMP_InputField>();
@@ -63,6 +71,10 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         typingSpeed = new WaitForSeconds(typeSpeed);
         AttachmentModeActive(false);
+
+        chatScreen.SetActive(false);
+        chatIcon.onClick.AddListener(OnIconClick);
+        closeButton.onClick.AddListener(CloseWindow);
     }
     private void Update()
     {
@@ -93,6 +105,33 @@ public class ChatAPTBehaviour : MonoBehaviour
         }
         //if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.I)) WebGLInteraction.TriggerRefresh();
     }
+
+    #region Close Window
+
+    public void OnIconClick()
+    {
+
+        float timeSinceLastClick = Time.time - lastClickTime;
+        lastClickTime = Time.time;
+
+        if (timeSinceLastClick <= doubleClickThreshold)
+        {
+            OpenWindow();
+        }
+    }
+
+    public void CloseWindow()
+    {
+        chatScreen.SetActive(false);
+    }
+
+    public void OpenWindow()
+    {
+        chatScreen.SetActive(true);
+    }
+    
+    #endregion Close Window
+
     #region Response System
     public void SubmitResponse()
     {
