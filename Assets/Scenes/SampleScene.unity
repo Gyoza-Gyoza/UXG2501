@@ -8017,6 +8017,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fa2a97c364a0f46a97a87ccf8e43d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetWindow: {fileID: 2025975615}
+  closeButton: {fileID: 141946641}
 --- !u!224 &8126351924096647733
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8504,6 +8506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9fa2a97c364a0f46a97a87ccf8e43d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetWindow: {fileID: 5893226461731115630}
+  closeButton: {fileID: 4513322619776131238}
 --- !u!114 &8956454916976086070
 MonoBehaviour:
   m_ObjectHideFlags: 0
