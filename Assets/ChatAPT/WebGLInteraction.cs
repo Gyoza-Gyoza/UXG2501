@@ -14,18 +14,26 @@ public class WebGLInteraction : MonoBehaviour
             Debug.Log("[UNITY] ✅ Recycle Bin UI found.");
         }
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0)) ReceiveMessage("HideRecycleBin");
+    }
     public void ReceiveMessage(string message)
     {
         Debug.Log($"[UNITY] ✅ Received message from browser: {message}");
 
         if (message == "HideRecycleBin")
         {
-            if (recycleBinObj != null)
+            if (PhaseManager.Instance.CurrentPhase is BuildingTrust buildingTrust)
             {
-                Debug.Log("[UNITY] Hide Recycle Bin");
-                recycleBinObj.SetActive(false);
+                buildingTrust.HideBin();
             }
+
+            //if (recycleBinObj != null)
+            //{
+            //    Debug.Log("[UNITY] Hide Recycle Bin");
+            //    recycleBinObj.SetActive(false);
+            //}
         }
     }
 }

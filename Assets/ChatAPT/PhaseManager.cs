@@ -33,6 +33,7 @@ public class PhaseManager : MonoBehaviour
         InitializeDatabase(typeof(Experimentation), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=0&format=csv");
         InitializeDatabase(typeof(SubmitAssignment), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=40104871&format=csv");
         InitializeDatabase(typeof(AssignmentSolving), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=1855310741&format=csv");
+        InitializeDatabase(typeof(BuildingTrust), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=1064419744&format=csv");
     }
     private void Update()
     {
@@ -118,7 +119,7 @@ public class SubmitAssignment : Phase //Phase 0.1
     public override Response GetResponse(string input)
     {
         Response result;
-        if (ChatAPTBehaviour.Instance.Attachment.tag == "Assignment")
+        if (ChatAPTBehaviour.Instance.Attachment.name == "Assignment Icon")
         {
             result = ResponseHandler.SearchKeywords(input);
             PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
@@ -131,84 +132,32 @@ public class SubmitAssignment : Phase //Phase 0.1
         return result;
     }
 }
-public class AssignmentSolving : Phase //Phase 1
+public class AssignmentSolving : Phase //Phase 0.2
 {
+    private int counter, responsesBeforeSwitch = 3;
     public AssignmentSolving()
     {
         
     }
+    public override Response GetResponse(string input)
+    {
+        counter++;
+        Response response = base.GetResponse(input);
+
+        if(counter >= responsesBeforeSwitch) PhaseManager.Instance.CurrentPhase = new BuildingTrust();
+
+        return response;
+    }
 }
-//Class to store information about the phase behaviour and reference to the phase specific response database 
-//Way to define what phase the action will complete 
-
-//public abstract class Phase<T> where T : Enum
-//{
-//    public Dictionary<string, Response> phaseResponsesDB = new Dictionary<string, Response>();
-
-//    public abstract void CompleteCondition();
-//}
-//public class Trust : Phase<Trust.SubPhase>
-//{
-//    public enum SubPhase
-//    {
-//        SubmitAsg,
-//        ChangeBG,
-//        DeleteBin
-//    }
-
-//    public Trust()
-//    {
-//        phaseResponsesDB = PhaseManager.instance.Phases[GetType()];
-//        currentPhase = SubPhase.SubmitAsg;
-//    }
-
-//    public override void CompleteCondition()
-//    {
-//        switch (currentPhase)
-//        {
-//            case SubPhase.SubmitAsg:
-//                currentPhase = SubPhase.ChangeBG;
-//                break;
-//            case SubPhase.ChangeBG:
-//                currentPhase = SubPhase.DeleteBin;
-//                break;
-//            case SubPhase.DeleteBin:
-//                break;
-//        }
-//    }
-//}
-
-//public class ProblemSolving : Phase<ProblemSolving.SubPhase>
-//{
-//    public enum SubPhase
-//    {
-//        AttachAsg,
-//        ChangeBG,
-//        DeleteBin
-//    }
-
-//    public ProblemSolving()
-//    {
-//        phaseResponsesDB = PhaseManager.instance.Phases[GetType()];
-//        currentPhase = SubPhase.AttachAsg;
-//    }
-
-//    public override void CompleteCondition()
-//    {
-//        switch (currentPhase)
-//        {
-//            case SubPhase.AttachAsg:
-//                currentPhase = SubPhase.ChangeBG;
-//                break;
-//            case SubPhase.ChangeBG:
-//                currentPhase = SubPhase.DeleteBin;
-//                break;
-//            case SubPhase.DeleteBin:
-//                // Mark phase as completed
-//                break;
-//        }
-//    }
-//}
-
-//Phase 0, players talk and experiment with the bot 
-//Phase 1 starts when the player attaches the assignment
+public class BuildingTrust : Phase
+{
+    private GameObject recycleBin; 
+    public BuildingTrust()
+    {
+        recycleBin = GameObject.FindGameObjectWithTag("RecycleBin");
+    }
+    public void HideBin()
+    {
+        recycleBin.SetActive(false);
+    }
+}

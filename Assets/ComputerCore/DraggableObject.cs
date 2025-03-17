@@ -36,10 +36,9 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
         ChatAPTBehaviour.Instance.AttachmentModeActive(false);
-        ChatAPTBehaviour chatAPTBehaviour = GetComponentInParent<ChatAPTBehaviour>();
-        if (ChatAPTBehaviour.Instance.InAttachmentArea)
+
+        if (ChatAPTBehaviour.Instance.InAttachmentArea && tag == "Attachable")
         {
-            //Its registering itself
             ChatAPTBehaviour.Instance.AttachObject(this);
             rectTransform.anchoredPosition = originalPos;
         }
