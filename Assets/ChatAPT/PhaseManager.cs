@@ -30,10 +30,12 @@ public class PhaseManager : MonoBehaviour
     }
     private void InitializePhases()
     {
-        InitializeDatabase(typeof(Experimentation), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=0&format=csv");
-        InitializeDatabase(typeof(SubmitAssignment), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=40104871&format=csv");
-        InitializeDatabase(typeof(AssignmentSolving), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=1855310741&format=csv");
-        InitializeDatabase(typeof(BuildingTrust), "https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid=1064419744&format=csv");
+        InitializeDatabase(typeof(Experimentation), 0);
+        InitializeDatabase(typeof(SubmitAssignment), 40104871);
+        InitializeDatabase(typeof(AssignmentSolving), 1855310741);
+        InitializeDatabase(typeof(BuildingTrust), 1064419744);
+        InitializeDatabase(typeof(ProblemSolving), 1009357142);
+        InitializeDatabase(typeof(EscalationIntimidation), 261502668);
     }
     private void Update()
     {
@@ -64,10 +66,11 @@ public class PhaseManager : MonoBehaviour
             }
         }
     }
-    private void InitializeDatabase(Type type, string link)
+    private void InitializeDatabase(Type type, int gid)
     {
         LoadingManager.LoadDatabase();
-        StartCoroutine(DatabaseHandler.GetDatabase(link, result =>
+        StartCoroutine(DatabaseHandler.GetDatabase($"https://docs.google.com/spreadsheets/d/1OncuKhA95jmtVfitsLe6EavoJfGq_eReZTcBSfEcnNs/export?gid={gid}&format=csv", 
+            result => 
             {
                 Phases.Add(type, DatabaseHandler.ParseCSV(result));
                 LoadingManager.DatabaseLoaded();
@@ -132,32 +135,96 @@ public class SubmitAssignment : Phase //Phase 0.1
         return result;
     }
 }
-public class AssignmentSolving : Phase //Phase 0.2
+public abstract class TakingOver : Phase
 {
-    private int counter, responsesBeforeSwitch = 3;
+    public int counter; 
+    public bool CheckResponse(string input)
+    {
+        foreach (string str in input.ToLower().Split(' '))
+        {
+            if (str == "question")
+            {
+                Debug.Log("counted");
+                return true;
+            }
+        }
+        return false;
+    }
+}
+public class AssignmentSolving : TakingOver //Phase 0.2
+{
+    private int responsesBeforeSwitch = 2;
+    public static int phaseCounter;
     public AssignmentSolving()
     {
         
     }
     public override Response GetResponse(string input)
     {
-        counter++;
         Response response = base.GetResponse(input);
 
-        if(counter >= responsesBeforeSwitch) PhaseManager.Instance.CurrentPhase = new BuildingTrust();
+        if (CheckResponse(input)) counter++;
+
+        if (counter >= responsesBeforeSwitch)
+        {
+            switch(phaseCounter)
+            {
+                case 0:
+                    PhaseManager.Instance.CurrentPhase = new BuildingTrust();
+                    break;
+
+                case 1:
+                    PhaseManager.Instance.CurrentPhase = new ProblemSolving();
+                    break;
+
+                case 2:
+                    PhaseManager.Instance.CurrentPhase = new EscalationIntimidation();
+                    break;
+            }
+            phaseCounter++;
+        }
 
         return response;
     }
 }
-public class BuildingTrust : Phase
+public class BuildingTrust : TakingOver //Phase 1
 {
     private GameObject recycleBin; 
     public BuildingTrust()
     {
-        recycleBin = GameObject.FindGameObjectWithTag("RecycleBin");
+        recycleBin = GameObject.Find("Recycle Bin Icon");
     }
     public void HideBin()
     {
         recycleBin.SetActive(false);
+        PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
+    }
+}
+public class ProblemSolving : TakingOver //Phase 2
+{
+    private string password = "029384";
+    public ProblemSolving()
+    {
+        
+    }
+    public override Response GetResponse(string input)
+    {
+        if (input.Contains(password))
+        {
+            Response result = PhaseResponses["U0000001"];
+
+            PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
+
+            return result;
+
+        }
+        else return base.GetResponse(input);
+    }
+}
+public class EscalationIntimidation : Phase //Phase 3
+{
+    public EscalationIntimidation()
+    {
+
     }
 }

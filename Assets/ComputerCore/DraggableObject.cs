@@ -39,6 +39,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if (ChatAPTBehaviour.Instance.InAttachmentArea && tag == "Attachable")
         {
+            ChatAPTBehaviour.Instance.InAttachmentArea = false;
             ChatAPTBehaviour.Instance.AttachObject(this);
             rectTransform.anchoredPosition = originalPos;
         }
