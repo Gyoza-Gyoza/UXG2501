@@ -24,7 +24,7 @@ public class WebGLInteraction : MonoBehaviour
 
         if (message == "HideRecycleBin")
         {
-            if (PhaseManager.Instance.CurrentPhase is BuildingTrust buildingTrust)
+            if (PhaseManager.Instance.CurrentPhase is ChangingBackground buildingTrust)
             {
                 buildingTrust.HideBin();
             }

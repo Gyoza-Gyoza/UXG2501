@@ -32,9 +32,9 @@ public class PhaseManager : MonoBehaviour
     {
         InitializeDatabase(typeof(Experimentation), 0);
         InitializeDatabase(typeof(SubmitAssignment), 40104871);
-        InitializeDatabase(typeof(AssignmentSolving), 1855310741);
-        InitializeDatabase(typeof(BuildingTrust), 1064419744);
-        InitializeDatabase(typeof(ProblemSolving), 1009357142);
+        InitializeDatabase(typeof(AnsweringQuestions), 1855310741);
+        InitializeDatabase(typeof(ChangingBackground), 1064419744);
+        InitializeDatabase(typeof(GettingPassword), 1009357142);
         InitializeDatabase(typeof(EscalationIntimidation), 261502668);
     }
     private void Update()
@@ -125,7 +125,7 @@ public class SubmitAssignment : Phase //Phase 0.1
         if (ChatAPTBehaviour.Instance.Attachment.name == "Assignment Icon")
         {
             result = ResponseHandler.SearchKeywords(input);
-            PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
+            PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
         }
         else
         {
@@ -135,46 +135,37 @@ public class SubmitAssignment : Phase //Phase 0.1
         return result;
     }
 }
-public abstract class TakingOver : Phase
+public class AnsweringQuestions : Phase //Phase 0.2
 {
-    public int counter; 
-    public bool CheckResponse(string input)
-    {
-        foreach (string str in input.ToLower().Split(' '))
-        {
-            if (str == "question")
-            {
-                Debug.Log("counted");
-                return true;
-            }
-        }
-        return false;
-    }
-}
-public class AssignmentSolving : TakingOver //Phase 0.2
-{
+    public int counter;
     private int responsesBeforeSwitch = 2;
     public static int phaseCounter;
-    public AssignmentSolving()
+    public AnsweringQuestions()
     {
-        
+
     }
     public override Response GetResponse(string input)
     {
         Response response = base.GetResponse(input);
 
-        if (CheckResponse(input)) counter++;
+        foreach (string str in input.ToLower().Split(' '))
+        {
+            if (str == "question")
+            {
+                counter++;
+            }
+        }
 
         if (counter >= responsesBeforeSwitch)
         {
             switch(phaseCounter)
             {
                 case 0:
-                    PhaseManager.Instance.CurrentPhase = new BuildingTrust();
+                    PhaseManager.Instance.CurrentPhase = new ChangingBackground();
                     break;
 
                 case 1:
-                    PhaseManager.Instance.CurrentPhase = new ProblemSolving();
+                    PhaseManager.Instance.CurrentPhase = new GettingPassword();
                     break;
 
                 case 2:
@@ -187,23 +178,23 @@ public class AssignmentSolving : TakingOver //Phase 0.2
         return response;
     }
 }
-public class BuildingTrust : TakingOver //Phase 1
+public class ChangingBackground : Phase //Phase 1
 {
     private GameObject recycleBin; 
-    public BuildingTrust()
+    public ChangingBackground()
     {
         recycleBin = GameObject.Find("Recycle Bin Icon");
     }
     public void HideBin()
     {
         recycleBin.SetActive(false);
-        PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
+        PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
     }
 }
-public class ProblemSolving : TakingOver //Phase 2
+public class GettingPassword : Phase //Phase 2
 {
     private string password = "029384";
-    public ProblemSolving()
+    public GettingPassword()
     {
         
     }
@@ -213,7 +204,7 @@ public class ProblemSolving : TakingOver //Phase 2
         {
             Response result = PhaseResponses["U0000001"];
 
-            PhaseManager.Instance.CurrentPhase = new AssignmentSolving();
+            PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
 
             return result;
 
