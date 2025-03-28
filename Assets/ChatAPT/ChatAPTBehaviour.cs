@@ -133,7 +133,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     #endregion Close Window
 
     #region Response System
-    public void SubmitResponse()
+    public void SubmitResponse() //Called upon submitting an input, contains the behaviour that takes in the user's input and returns a response
     {
         if (inputField.text == "") return;
         userInput = inputField.text; //Store the text 
@@ -143,7 +143,7 @@ public class ChatAPTBehaviour : MonoBehaviour
         Response response = PhaseManager.Instance.CurrentPhase.GetResponse(userInput);
 
         if (response != null) Respond(response);
-        else Respond(ResponseHandler.GetInvalidResponse());
+        else Respond(PhaseManager.Instance.CurrentPhase.InvalidResponse());
 
         SetAttachmentPopUpActive(false);
     }

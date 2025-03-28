@@ -90,6 +90,22 @@ public class Phase
     {
         return ResponseHandler.SearchKeywords(input);
     }
+    public virtual Response InvalidResponse()
+    {
+        List<Response> tempResponses = new List<Response>();
+        foreach (KeyValuePair <string, Response> response in PhaseResponses)
+        {
+            if (response.Key[0] == 'I') tempResponses.Add(response.Value);
+        }
+
+        if (tempResponses.Count == 0)
+        {
+            Debug.LogError($"No invalid responses found in {GetType()}!");
+            return null; 
+        }
+
+        return tempResponses[UnityEngine.Random.Range(0, tempResponses.Count)];
+    }
     public virtual void OnAttach()
     {
 
@@ -113,7 +129,7 @@ public class Experimentation : Phase //Phase 0
         PhaseManager.Instance.CurrentPhase = new SubmitAssignment();
     }
 }
-public class SubmitAssignment : Phase //Phase 0.1
+public class SubmitAssignment : Phase //Phase 0.1 
 {
     public SubmitAssignment()
     {
@@ -122,12 +138,13 @@ public class SubmitAssignment : Phase //Phase 0.1
     public override Response GetResponse(string input)
     {
         Response result;
-        if (ChatAPTBehaviour.Instance.Attachment.name == "Assignment Icon")
+        if (ChatAPTBehaviour.Instance.Attachment.name == "Assignment Icon") //If correct attachment
         {
             result = ResponseHandler.SearchKeywords(input);
+            if (result == null) result = InvalidResponse();
             PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
         }
-        else
+        else //If wrong attachment
         {
             result = PhaseResponses["U0000004"];
             PhaseManager.Instance.CurrentPhase = new Experimentation();
@@ -146,9 +163,9 @@ public class AnsweringQuestions : Phase //Phase 0.2
     }
     public override Response GetResponse(string input)
     {
-        Response response = base.GetResponse(input);
+        Response response = base.GetResponse(input); //Checks the base database for responses 
 
-        foreach (string str in input.ToLower().Split(' '))
+        foreach (string str in input.ToLower().Split(' ')) //Checks if the user is asking about questions
         {
             if (str == "question")
             {
@@ -156,7 +173,7 @@ public class AnsweringQuestions : Phase //Phase 0.2
             }
         }
 
-        if (counter >= responsesBeforeSwitch)
+        if (counter >= responsesBeforeSwitch) 
         {
             switch(phaseCounter)
             {

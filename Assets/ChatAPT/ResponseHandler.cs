@@ -4,12 +4,12 @@ using UnityEngine;
 
 public static class ResponseHandler
 {
-    private static Response[] invalidInputResponses = new Response[3]
-    {
-        new Response(new string[0], "Sorry I don't understand that", "", true),
-        new Response(new string[0], "Can you try something else", "", true),
-        new Response(new string[0], "I understand but not I don't know", "", true)
-    };
+    //private static Response[] invalidInputResponses = new Response[3]
+    //{
+    //    new Response(new string[0], "Sorry I don't understand that", "", true),
+    //    new Response(new string[0], "Can you try something else", "", true),
+    //    new Response(new string[0], "I understand but not I don't know", "", true)
+    //};
     public static Response SearchKeywords(string input) //Response process 
     {
         string[] userInput = input.ToLower().Split(' ');
@@ -41,10 +41,6 @@ public static class ResponseHandler
 
         //Respond with the selected response
         return selectedResponse;
-    }
-    public static Response GetInvalidResponse()
-    {
-        return invalidInputResponses[Random.Range(0, invalidInputResponses.Length)];
     }
     private static bool CheckExact(string input, out Response foundResponse)
     {
