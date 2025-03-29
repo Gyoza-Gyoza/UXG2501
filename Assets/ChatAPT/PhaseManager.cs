@@ -35,7 +35,7 @@ public class PhaseManager : MonoBehaviour
         InitializeDatabase(typeof(AnsweringQuestions), 1855310741);
         InitializeDatabase(typeof(ChangingBackground), 1064419744);
         InitializeDatabase(typeof(GettingPassword), 1009357142);
-        InitializeDatabase(typeof(EscalationIntimidation), 261502668);
+        InitializeDatabase(typeof(RemovingButton), 261502668);
     }
     private void Update()
     {
@@ -186,7 +186,7 @@ public class AnsweringQuestions : Phase //Phase 0.2
                     break;
 
                 case 2:
-                    PhaseManager.Instance.CurrentPhase = new EscalationIntimidation();
+                    PhaseManager.Instance.CurrentPhase = new RemovingButton();
                     break;
             }
             phaseCounter++;
@@ -229,9 +229,21 @@ public class GettingPassword : Phase //Phase 2
         else return base.GetResponse(input);
     }
 }
-public class EscalationIntimidation : Phase //Phase 3
+public class RemovingButton : Phase //Phase 3
 {
-    public EscalationIntimidation()
+    private GameObject button;
+    public RemovingButton()
+    {
+        button = GameObject.Find("ButtonToRemove");
+    }
+    public void RemoveButton()
+    {
+        ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000001"]);
+    }
+}
+public class RemoveDiv : Phase //Phase 3.5
+{
+    public RemoveDiv()
     {
 
     }

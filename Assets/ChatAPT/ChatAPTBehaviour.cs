@@ -163,7 +163,7 @@ public class ChatAPTBehaviour : MonoBehaviour
                 break;
         }
     }
-    private void Respond(Response response)
+    public void Respond(Response response)
     {
         DebugMode.Instance.SetResponse(response);
 

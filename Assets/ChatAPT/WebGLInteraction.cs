@@ -17,23 +17,26 @@ public class WebGLInteraction : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0)) ReceiveMessage("HideRecycleBin");
+        if (Input.GetKeyDown(KeyCode.Alpha9)) ReceiveMessage("RemoveButton");
     }
-    public void ReceiveMessage(string message)
+    public void ReceiveMessage(string message) //Takes in messages from javascript and performs behaviour based on it
     {
         Debug.Log($"[UNITY] ✅ Received message from browser: {message}");
 
-        if (message == "HideRecycleBin")
+        switch(message)
         {
-            if (PhaseManager.Instance.CurrentPhase is ChangingBackground buildingTrust)
-            {
-                buildingTrust.HideBin();
-            }
+            case "HideRecycleBin":
+                if (PhaseManager.Instance.CurrentPhase is ChangingBackground changingBackground)
+                {
+                    changingBackground.HideBin();
+                }
+                break;
 
-            //if (recycleBinObj != null)
-            //{
-            //    Debug.Log("[UNITY] Hide Recycle Bin");
-            //    recycleBinObj.SetActive(false);
-            //}
+            case "RemoveButton": 
+                if (PhaseManager.Instance.CurrentPhase is RemovingButton removeButton)
+                {
+
+                }
         }
     }
 }
