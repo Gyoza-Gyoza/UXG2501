@@ -35,8 +35,9 @@ public class WebGLInteraction : MonoBehaviour
             case "RemoveButton": 
                 if (PhaseManager.Instance.CurrentPhase is RemovingButton removeButton)
                 {
-
+                    removeButton.RemoveButton();
                 }
+                break;
         }
     }
 }

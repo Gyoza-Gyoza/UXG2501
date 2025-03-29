@@ -43,6 +43,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     private TMP_InputField inputField;
     private string userInput;
     private WaitForSeconds typingSpeed;
+    private List<Response> currentResponses = new List<Response>();
     public DraggableObject Attachment
     { get; private set; }
 
@@ -147,22 +148,6 @@ public class ChatAPTBehaviour : MonoBehaviour
 
         SetAttachmentPopUpActive(false);
     }
-    private void CreateTextEntry(ChatEntity texter, string text)
-    {
-        GameObject textPrefab = null;
-        switch (texter)
-        {
-            case ChatEntity.ChatAPT:
-                textPrefab = Instantiate(chatAPTTextPrefab, chatContent);
-                StartCoroutine(TypingEffect(textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>(), text));
-                break;
-
-            case ChatEntity.User:
-                textPrefab = Instantiate(userTextPrefab, chatContent);
-                textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text = text;
-                break;
-        }
-    }
     public void Respond(Response response)
     {
         DebugMode.Instance.SetResponse(response);
@@ -175,6 +160,22 @@ public class ChatAPTBehaviour : MonoBehaviour
             }
         }
         CreateTextEntry(ChatEntity.ChatAPT, response.response);
+    }
+    private void CreateTextEntry(ChatEntity speaker, string text)
+    {
+        GameObject textPrefab = null;
+        switch (speaker)
+        {
+            case ChatEntity.ChatAPT:
+                textPrefab = Instantiate(chatAPTTextPrefab, chatContent);
+                StartCoroutine(TypingEffect(textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>(), text));
+                break;
+
+            case ChatEntity.User:
+                textPrefab = Instantiate(userTextPrefab, chatContent);
+                textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text = text;
+                break;
+        }
     }
     private IEnumerator TypingEffect(TextMeshProUGUI text, string textToType)
     {

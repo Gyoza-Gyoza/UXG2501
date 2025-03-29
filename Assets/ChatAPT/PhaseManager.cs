@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PhaseManager : MonoBehaviour
@@ -76,12 +77,21 @@ public class PhaseManager : MonoBehaviour
                 LoadingManager.DatabaseLoaded();
             }));
     }
+    public bool IsValidPin(string input)
+    {
+        foreach(string str in input.Split(' '))
+        {
+            if (str.Length == 6 && str.All(char.IsDigit)) return true;
+        }
+        return false;
+    }
 }
 
 public class Phase
 {
     public Dictionary<string, Response> PhaseResponses
     { get; protected set; }
+    protected bool initialPromptGiven = false;
     public Phase()
     {
         PhaseResponses = PhaseManager.Instance.Phases[GetType()];
@@ -100,8 +110,10 @@ public class Phase
 
         if (tempResponses.Count == 0)
         {
-            Debug.LogError($"No invalid responses found in {GetType()}!");
-            return null; 
+            foreach(KeyValuePair<string, Response> kvp in PhaseManager.Instance.Phases[typeof(Experimentation)])
+            {
+                if (kvp.Key[0] == 'I') tempResponses.Add(kvp.Value);
+            }
         }
 
         return tempResponses[UnityEngine.Random.Range(0, tempResponses.Count)];
@@ -197,16 +209,26 @@ public class AnsweringQuestions : Phase //Phase 0.2
 }
 public class ChangingBackground : Phase //Phase 1
 {
-    private GameObject recycleBin; 
+    private GameObject recycleBin;
     public ChangingBackground()
     {
         recycleBin = GameObject.Find("Recycle Bin Icon");
+    }
+    public override Response GetResponse(string input)
+    {
+        if (!initialPromptGiven)
+        {
+            initialPromptGiven = true;
+            return PhaseResponses["U0000001"];
+        }
+        return base.GetResponse(input);
     }
     public void HideBin()
     {
         recycleBin.SetActive(false);
         PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
     }
+    //Prompt player to do tasks 
 }
 public class GettingPassword : Phase //Phase 2
 {
@@ -217,16 +239,29 @@ public class GettingPassword : Phase //Phase 2
     }
     public override Response GetResponse(string input)
     {
-        if (input.Contains(password))
+        if (!initialPromptGiven)
         {
-            Response result = PhaseResponses["U0000001"];
+            initialPromptGiven = true;
+            return PhaseResponses["U0000001"];
+        }
+            if (input.Contains(password))
+        {
+            Response result = PhaseResponses["U0000002"];
 
             PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
 
             return result;
 
         }
+        else if (PhaseManager.Instance.IsValidPin(input))
+        {
+            return PhaseResponses["U0000003"];
+        }
         else return base.GetResponse(input);
+    }
+    public override Response InvalidResponse()
+    {
+        return base.InvalidResponse();
     }
 }
 public class RemovingButton : Phase //Phase 3
