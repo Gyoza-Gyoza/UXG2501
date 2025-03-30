@@ -38,6 +38,13 @@ public class WebGLInteraction : MonoBehaviour
                     removeButton.RemoveButton();
                 }
                 break;
+
+            case "RemoveDiv":
+                if (PhaseManager.Instance.CurrentPhase is RemovingDiv removingDiv)
+                {
+                    removingDiv.RemoveDiv();
+                }
+                break;
         }
     }
 }

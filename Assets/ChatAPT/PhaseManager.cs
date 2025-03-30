@@ -226,9 +226,9 @@ public class ChangingBackground : Phase //Phase 1
     public void HideBin()
     {
         recycleBin.SetActive(false);
+        ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000002"]);
         PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
     }
-    //Prompt player to do tasks 
 }
 public class GettingPassword : Phase //Phase 2
 {
@@ -282,9 +282,13 @@ public class RemovingButton : Phase //Phase 3
         exitButton.SetActive(false);
     }
 }
-public class RemoveDisplay : Phase //Phase 3.5
+public class RemovingDiv : Phase //Phase 3.5
 {
-    public RemoveDisplay()
+    public RemovingDiv()
+    {
+
+    }
+    public void RemoveDiv()
     {
 
     }
