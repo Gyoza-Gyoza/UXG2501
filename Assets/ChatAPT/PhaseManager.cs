@@ -239,12 +239,12 @@ public class GettingPassword : Phase //Phase 2
     }
     public override Response GetResponse(string input)
     {
-        if (!initialPromptGiven)
+        if (!initialPromptGiven) //First response prompting the user to get the password
         {
             initialPromptGiven = true;
             return PhaseResponses["U0000001"];
         }
-            if (input.Contains(password))
+        if (input.Contains(password)) //Response if the password is correct
         {
             Response result = PhaseResponses["U0000002"];
 
@@ -253,32 +253,38 @@ public class GettingPassword : Phase //Phase 2
             return result;
 
         }
-        else if (PhaseManager.Instance.IsValidPin(input))
+        else if (PhaseManager.Instance.IsValidPin(input)) //Response if a valid password is given but not the correct one 
         {
             return PhaseResponses["U0000003"];
         }
-        else return base.GetResponse(input);
-    }
-    public override Response InvalidResponse()
-    {
-        return base.InvalidResponse();
+        else return base.GetResponse(input); //Response for invalid keywords
     }
 }
 public class RemovingButton : Phase //Phase 3
 {
-    private GameObject button;
+    private GameObject exitButton;
     public RemovingButton()
     {
-        button = GameObject.Find("ButtonToRemove");
+        exitButton = GameObject.Find("ChatAPTCloseButton");
+    }
+    public override Response GetResponse(string input)
+    {
+        if (!initialPromptGiven)
+        {
+            initialPromptGiven = true;
+            return PhaseResponses["U0000001"];
+        }
+        else return base.GetResponse(input); 
     }
     public void RemoveButton()
     {
-        ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000001"]);
+        ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000002"]);
+        exitButton.SetActive(false);
     }
 }
-public class RemoveDiv : Phase //Phase 3.5
+public class RemoveDisplay : Phase //Phase 3.5
 {
-    public RemoveDiv()
+    public RemoveDisplay()
     {
 
     }
