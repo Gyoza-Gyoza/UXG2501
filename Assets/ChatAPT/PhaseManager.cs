@@ -19,6 +19,7 @@ public class PhaseManager : MonoBehaviour
             currentPhase = value; 
         }
     }
+    public GameObject Popup;
 
     public static PhaseManager Instance;
     private void Awake()
@@ -37,6 +38,7 @@ public class PhaseManager : MonoBehaviour
         InitializeDatabase(typeof(ChangingBackground), 1064419744);
         InitializeDatabase(typeof(GettingPassword), 1009357142);
         InitializeDatabase(typeof(RemovingButton), 261502668);
+        InitializeDatabase(typeof(FinalPhase), 825300022);
     }
     private void Update()
     {
@@ -46,25 +48,30 @@ public class PhaseManager : MonoBehaviour
             if(CurrentPhase == null) Debug.Log("Null");
             CurrentPhase = new Experimentation();
         }
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKey(KeyCode.LeftAlt))
         {
-            foreach (KeyValuePair<string, Response> response in CurrentPhase.PhaseResponses)
+            if(Input.GetKeyDown(KeyCode.O))
             {
-                string debug = "";
+                foreach (KeyValuePair<string, Response> response in CurrentPhase.PhaseResponses)
+                {
+                    string debug = "";
 
-                debug += response.Key + " " + response.Value.keywords.Count + "\n";
-                foreach (string str in response.Value.unlocksResponse)
-                {
-                    debug += str + ",";
+                    debug += response.Key + " " + response.Value.keywords.Count + "\n";
+                    foreach (string str in response.Value.unlocksResponse)
+                    {
+                        debug += str + ",";
+                    }
+                    debug += "\n";
+                    foreach (string keyword in response.Value.keywords)
+                    {
+                        debug += keyword + ", ";
+                    }
+                    debug += response.Value.response + " " + response.Value.isUnlocked;
+                    Debug.Log(debug);
                 }
-                debug += "\n";
-                foreach (string keyword in response.Value.keywords)
-                {
-                    debug += keyword + ", ";
-                }
-                debug += response.Value.response + " " + response.Value.isUnlocked;
-                Debug.Log(debug);
             }
+            if(Input.GetKeyDown(KeyCode.Alpha1)) CurrentPhase = new FinalPhase();
+            if (Input.GetKeyDown(KeyCode.Alpha3)) if (CurrentPhase is FinalPhase finalPhase) finalPhase.SetPopupActive(true);
         }
     }
     private void InitializeDatabase(Type type, int gid)
@@ -85,6 +92,16 @@ public class PhaseManager : MonoBehaviour
         }
         return false;
     }
+    //private IEnumerator TakeOverSequence()
+    //{
+    //    //AI takes over 
+    //    //Windows defender pops up 
+    //    //Bunch of minigames appear 
+    //    //Captcha kind 
+    //    //After completion, windows defender will have a pop up saying virus detected and asking if the user wants to remove the virus
+    //    //AI will spam messages, telling the user to stop it (Maybe can have a message popup) 
+    //    //When the player tries to click on the remove virus button, the AI will move the popup around, trying to get the player to not click on the popup 
+    //}
 }
 
 public class Phase
@@ -290,6 +307,41 @@ public class RemovingDiv : Phase //Phase 3.5
     }
     public void RemoveDiv()
     {
+        
+    }
+}
+public class FinalPhase : Phase
+{
+    private float randomRange = 50f;
+    private Tuple<float, float> messageFrequencyRange = new Tuple<float, float>(0.1f, 0.5f);
+    private Tuple<int, int> messageRange = new Tuple<int, int>(0, 5); 
+    private bool lastMessage;
+    public FinalPhase()
+    {
+    }
+    public void SetPopupActive(bool state) => PhaseManager.Instance.Popup.SetActive(state);
+    public void MovePopup()
+    {
+        Vector3 randomPos = GetRandomPosition();
 
+        while (Vector3.Distance(randomPos, PhaseManager.Instance.Popup.transform.position) <= randomRange)
+        {
+            randomPos = GetRandomPosition();
+        }
+        ChatAPTBehaviour.Instance.Respond(PhaseResponses[$"U000000{UnityEngine.Random.Range(messageRange.Item1 + 1, messageRange.Item2 + 1)}"]);
+        PhaseManager.Instance.Popup.transform.position = randomPos;
+    }
+    public IEnumerator SpamMessages()
+    {
+        lastMessage = true;
+        while(lastMessage)
+        {
+            ChatAPTBehaviour.Instance.Respond(PhaseResponses[$"U000000{UnityEngine.Random.Range(messageRange.Item1 + 1, messageRange.Item2 + 1)}"]);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(messageFrequencyRange.Item1, messageFrequencyRange.Item2));
+        }
+    }
+    private Vector3 GetRandomPosition()
+    {
+        return new Vector3(UnityEngine.Random.Range(0, Screen.width), UnityEngine.Random.Range(0, Screen.height));
     }
 }

@@ -56,6 +56,8 @@ public class ChatAPTBehaviour : MonoBehaviour
         User
     }
 
+    private AudioSource messageReceivedAudio; 
+
     //Hide Window (Dylan)
     public GameObject chatScreen;
     public Button chatIcon;
@@ -67,6 +69,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         inputField = userInputGO.GetComponent<TMP_InputField>();
         if (Instance == null) Instance = this;
+        messageReceivedAudio = GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -159,6 +162,8 @@ public class ChatAPTBehaviour : MonoBehaviour
                 PhaseManager.Instance.CurrentPhase.PhaseResponses[unlock].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
             }
         }
+        messageReceivedAudio.Stop();
+        messageReceivedAudio.Play();
         CreateTextEntry(ChatEntity.ChatAPT, response.response);
     }
     private void CreateTextEntry(ChatEntity speaker, string text)
