@@ -12,8 +12,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function notifyUnitySmartHome() {
+        console.log("📤 Sending message to Unity: SmartHome");
+
+        if (window.unityInstance) {
+            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "SmartHome");
+            console.log("✅ Successfully sent message to Unity!");
+        }
+    }
+
     function notifyUnityRoot() {
-        console.log("📤 Sending message to Unity: HideRecycleBin");
+        console.log("📤 Sending message to Unity: BlackScreen");
 
         if (window.unityInstance) {
             window.unityInstance.SendMessage("Systems", "ReceiveMessage", "BlackScreen");
@@ -22,6 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //----------------------------------- Change Images (Light to Dark) -----------------------------------------------
+
+    function ChangeWebBg() {
+        changeTableImage();
+        changeOverlayImage();
+        changePostItImage();
+    }
 
     function changeTableImage() {
         const imageContainer = document.getElementById("table-background"); //Ensure this ID exists in your HTML
@@ -113,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
             changeTableImage();
             changeOverlayImage();
             changePostItImage();
+            //notifyUnitySmartHome();
         }
     });
 
