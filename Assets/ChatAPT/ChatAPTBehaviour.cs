@@ -31,6 +31,18 @@ public class ChatAPTBehaviour : MonoBehaviour
     [SerializeField]
     private GameObject textArea;
 
+    [SerializeField]
+    private float windowShakeIntensity, windowShakeFrequency;
+
+    private RectTransform windowRectTransform;
+    private Vector3 windowOriginalPosition;
+
+    [SerializeField]
+    private GameObject blackScreen;
+
+    [HideInInspector]
+    public IEnumerator windowShake; 
+
     [Header("Attachment Variables")]
     [SerializeField]
     private GameObject attachmentArea;
@@ -43,6 +55,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     private TMP_InputField inputField;
     private string userInput;
     private WaitForSeconds typingSpeed;
+    private List<Response> currentResponses = new List<Response>();
     public DraggableObject Attachment
     { get; private set; }
 
@@ -55,6 +68,8 @@ public class ChatAPTBehaviour : MonoBehaviour
         User
     }
 
+    private AudioSource messageReceivedAudio; 
+
     //Hide Window (Dylan)
     public GameObject chatScreen;
     public Button chatIcon;
@@ -66,6 +81,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     {
         inputField = userInputGO.GetComponent<TMP_InputField>();
         if (Instance == null) Instance = this;
+        messageReceivedAudio = GetComponent<AudioSource>();
     }
     private void Start()
     {
@@ -75,6 +91,9 @@ public class ChatAPTBehaviour : MonoBehaviour
         chatScreen.SetActive(false);
         chatIcon.onClick.AddListener(OnIconClick);
         closeButton.onClick.AddListener(CloseWindow);
+
+        windowRectTransform = chatScreen.GetComponent<RectTransform>();
+        windowShake = WindowShake();
     }
     private void Update()
     {
@@ -130,10 +149,28 @@ public class ChatAPTBehaviour : MonoBehaviour
         chatScreen.SetActive(true);
     }
     
+    public void RemoveAllButWindow()
+    {
+        blackScreen.SetActive(true);
+        blackScreen.transform.SetAsLastSibling();
+        chatScreen.transform.SetAsLastSibling();
+    }
+    private IEnumerator WindowShake()
+    {
+        windowOriginalPosition = windowRectTransform.position;
+        while (true)
+        {
+            float x = Mathf.PerlinNoise(Time.time * windowShakeFrequency, 0f) * 2 - 1;
+            float y = Mathf.PerlinNoise(0f, Time.time * windowShakeFrequency) * 2 - 1;
+
+            windowRectTransform.anchoredPosition = windowOriginalPosition + new Vector3(x, y, 0) * windowShakeIntensity;
+            yield return null;
+        }
+    }
     #endregion Close Window
 
     #region Response System
-    public void SubmitResponse()
+    public void SubmitResponse() //Called upon submitting an input, contains the behaviour that takes in the user's input and returns a response
     {
         if (inputField.text == "") return;
         userInput = inputField.text; //Store the text 
@@ -143,14 +180,29 @@ public class ChatAPTBehaviour : MonoBehaviour
         Response response = PhaseManager.Instance.CurrentPhase.GetResponse(userInput);
 
         if (response != null) Respond(response);
-        else Respond(ResponseHandler.GetInvalidResponse());
+        else Respond(PhaseManager.Instance.CurrentPhase.InvalidResponse());
 
         SetAttachmentPopUpActive(false);
     }
-    private void CreateTextEntry(ChatEntity texter, string text)
+    public void Respond(Response response)
+    {
+        DebugMode.Instance.SetResponse(response);
+
+        if (response.unlocksResponse.Length > 0)
+        {
+            foreach (string unlock in response.unlocksResponse)
+            {
+                PhaseManager.Instance.CurrentPhase.PhaseResponses[unlock].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
+            }
+        }
+        messageReceivedAudio.Stop();
+        messageReceivedAudio.Play();
+        CreateTextEntry(ChatEntity.ChatAPT, response.response);
+    }
+    private void CreateTextEntry(ChatEntity speaker, string text)
     {
         GameObject textPrefab = null;
-        switch (texter)
+        switch (speaker)
         {
             case ChatEntity.ChatAPT:
                 textPrefab = Instantiate(chatAPTTextPrefab, chatContent);
@@ -162,19 +214,6 @@ public class ChatAPTBehaviour : MonoBehaviour
                 textPrefab.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text = text;
                 break;
         }
-    }
-    private void Respond(Response response)
-    {
-        DebugMode.Instance.SetResponse(response);
-
-        if (response.unlocksResponse.Length > 0)
-        {
-            foreach (string unlock in response.unlocksResponse)
-            {
-                PhaseManager.Instance.CurrentPhase.PhaseResponses[unlock].isUnlocked = true; //Unlocks the response based on the unlocksResponse variable
-            }
-        }
-        CreateTextEntry(ChatEntity.ChatAPT, response.response);
     }
     private IEnumerator TypingEffect(TextMeshProUGUI text, string textToType)
     {

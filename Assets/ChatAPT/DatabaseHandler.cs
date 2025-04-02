@@ -32,7 +32,7 @@ public static class DatabaseHandler
         {
             string[] values = data[i].Split(',');
 
-            result.Add(values[0], new Response(values[1].Split(' '), values[2].Replace('#', ','), values[3], values[0][0] == 'U'));
+            result.Add(values[0], new Response(values[1].Split(' '), values[2].Replace('%', ','), values[3], values[0][0] == 'U'));
         }
         return result;
     }

@@ -1,10 +1,13 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI; // Required for UI components
 
 public class WebGLInteraction : MonoBehaviour
 {
-    public GameObject recycleBinObj;
+    [DllImport("__Internal")]
+    public static extern void ChangeWebBg();
 
+    public GameObject recycleBinObj;
     void Start()
     {
         Debug.Log("[UNITY] ✅ WebGL Script Loaded");
@@ -14,18 +17,37 @@ public class WebGLInteraction : MonoBehaviour
             Debug.Log("[UNITY] ✅ Recycle Bin UI found.");
         }
     }
-
-    public void ReceiveMessage(string message)
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0)) ReceiveMessage("HideRecycleBin");
+        if (Input.GetKeyDown(KeyCode.Alpha9)) ReceiveMessage("RemoveButton");
+    }
+    public void ReceiveMessage(string message) //Takes in messages from javascript and performs behaviour based on it
     {
         Debug.Log($"[UNITY] ✅ Received message from browser: {message}");
 
-        if (message == "HideRecycleBin")
+        switch(message)
         {
-            if (recycleBinObj != null)
-            {
-                Debug.Log("[UNITY] Hide Recycle Bin");
-                recycleBinObj.SetActive(false);
-            }
+            case "HideRecycleBin":
+                if (PhaseManager.Instance.CurrentPhase is ChangingBackground changingBackground)
+                {
+                    changingBackground.HideBin();
+                }
+                break;
+
+            case "RemoveButton": 
+                if (PhaseManager.Instance.CurrentPhase is RemovingButton removeButton)
+                {
+                    removeButton.RemoveButton();
+                }
+                break;
+
+            case "BlackScreen":
+                if (PhaseManager.Instance.CurrentPhase is RemovingDiv removingDiv)
+                {
+                    removingDiv.RemoveDiv();
+                }
+                break;
         }
     }
 }
