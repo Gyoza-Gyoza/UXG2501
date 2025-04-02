@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Starting MutationObserver for ChatAPT comment tracking...");
     let commentNode = null;
     document.body.childNodes.forEach((node) => {
-        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("chatapt.exe_permission_level")) {
+        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("CHATAPT.exe_permission_level")) {
             commentNode = node;
         }
     });
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Starting MutationObserver for Root Access comment tracking...");
     let commentNodeRoot = null;
     document.body.childNodes.forEach((node) => {
-        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("chatapt.exe_root_write_access")) {
+        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("CHATAPT.exe_root_write_access")) {
             commentNodeRoot = node;
         }
     });
