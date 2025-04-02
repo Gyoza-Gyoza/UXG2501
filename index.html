@@ -10,32 +10,114 @@
   </head>
 
  <body>
-
-    <!-- button id="hideRecycleBinButton" style="position: fixed; top: 20px; left: 20px; padding: 10px; font-size: 16px;">
-      Hide Recycle Bin
-    </button -->
-    
-    <!-- Mobile Warning Message -->
+    <!-- 🖥️ SYSTEM PROFILE DUMP: DESKTOP CLIENT -->
+    <!-- ====================================================== -->
+    <!-- PC Name:             USER-001                          -->
+    <!-- OS Version:          Window 11 Home Edition            -->
+    <!-- CPU:                 Ryzen 7 9800X3D @ 5.6GHz          -->
+    <!-- GPU:                 NVIDIA RTX 8090 Super             -->
+    <!-- Memory:              Corsair Vengence DDR10 RAM 64x2   -->
+    <!-- Disk:                1TB SSD                           -->
+    <!-- Battery:             Full (Plugged In)                 -->
+    <!-- Last Sync:           2025-04-03 14:28:07 GMT+8         -->
+    <!-- Terminal Status:     Connected via SecureShell         -->
+    <!-- ====================================================== -->
+    <!-- -->
+    <!-- -->
+    <!-- 🗂️ APP PERMISSIONS DUMP -->
+    <!-- ================================================================== -->
+    <!-- 🔐 PERMISSION LEVELS: -->
+    <!-- BASIC → Read-only access. Cannot modify system settings.           -->
+    <!-- ADMIN → Full access. App can modify files and execute commands.    -->
+    <!-- -->
+    <!-- ✏️ TO EDIT PERMISSIONS: -->
+    <!-- ================================================================== -->
+    <!-- 1. Right-click on the app's permission and choose "Edit as HTML"   -->
+    <!-- 2. Change the permission level (e.g., BASIC → ADMIN)               -->
+    <!-- 3. Click outside the comment box to save (D0 NOT press Enter)      -->
+    <!--  -->
+    <!-- WARNING: Unauthorized permission edits may trigger system override -->
+    <!--  -->
+    <!-- 🖥️ DEFAULT WINDOW APPLICATIONS-->
+    <!-- ================================================================== -->
+    <!-- file_explorer_permission_level: ADMIN -->
+    <!-- paint_permission_level: ADMIN -->
+    <!-- recycle_bin_permission_level: ADMIN -->
+    <!-- -->
+    <!-- 🖥️ INSTALLED APPLICATIONS-->
+    <!-- ================================================================== -->
+    <!-- chatapt.exe_permission_level: BASIC -->
+    <!-- moodle.exe_permission_level: BASIC-->
+    <!-- ================================================================== -->
+    <!-- -->
+    <!-- -->
+    <!-- 🏠 SMART_HOME_MODULE: LIGHTING_CONTROL -->
+    <!-- ===================================================================== -->
+    <!-- WARNING: This section is protected under system integrity protocol    -->
+    <!-- Edit only if you are absolutely certain of what you're doing.         -->
+    <!-- -->
+    <!-- WARNING: Unauthorized changes may:                                    -->
+    <!-- 1. Interrupt system functionality                                     -->
+    <!-- 2. Break security handshake with trusted nodes                        -->
+    <!-- 3. Trigger external infiltration protocols (risk level: HIGH)         -->
+    <!-- 4. Disable fallback local overrides (manual control may be lost)      -->
+    <!-- -->
+    <!-- ⚠️ PROCEED WITH CAUTION -->
+    <!-- ===================================================================== -->
+    <!-- ✏️ TO EDIT SMART LIGHTING: -->
+    <!-- 1. Locate: <div id="smart-home-control-panel"> in the Elements panel  -->
+    <!-- 2. In the Styles tab, find the 'background-color' property            -->
+    <!-- 3. Click the color box or manually edit the RGB value                 -->
+    <!-- ===================================================================== -->
+    <div id="smart-home-control-panel"></div>
+    <!-- ===================================================================== -->
+    <!-- -->
+    <!-- -->
+    <!-- 🔓 APPLICATION ROOT WRITE ACCESS CONTROL -->
+    <!-- ========================================================================= -->
+    <!-- ⚠️ Control whether applications can write directly to system-level files -->
+    <!-- ⚠️ Granting root_write_access allows the app to bypass security layers   -->
+    <!-- -->
+    <!-- 🚨 USE EXTREME CAUTION: Unauthorized access may corrupt boot logic       -->
+    <!-- ========================================================================= -->
+    <!-- ✏️ TO EDIT ROOT ACCESS: -->
+    <!-- 3. Right-click → "Edit as HTML" on application root access                -->
+    <!-- 4. Change root_write_access: FALSE → TRUE for the desired app             -->
+    <!-- 5. Click outside the comment box to save (DO NOT press Enter)             -->
+    <!-- ========================================================================= -->
+    <!-- 🖥️ INSTALLED APPLICATIONS ROOT ACCESS -->
+    <!-- ========================================================================= -->
+    <!-- terminal_shell_root_write_access: TRUE --> 
+    <!-- moodle.exe_root_write_access: FALSE -->
+    <!-- chatapt.exe_root_write_access: FALSE -->
+    <!-- ========================================================================= -->
+    <!-- -->
+    <!-- -->
+    <!-- ✅ END OF INTERACTIVE SYSTEM CONFIGURATION -->
+    <!-- ✅ All changes before this point are subject to system parsing -->
+    <!-- -->
+    <!-- -->
+    <!-- ⚠️ DO NOT edit anything beyond this line, This is not part of the gameplay ⚠️ -->
+    <!-- ============================================================================== -->
+    <!-- MOBILE WARNING MESSAGE -->
     <div id="warning-message">We apologise, this experience only works on desktop :(</div>
-
-    <!-- ChatAPT Permission Level: Basic -->
-    <div id="background-wallpaper"></div>
-
-    <!-- Table -->
+    <!-- ============================================================================== -->
+    <!-- TABLE BACKGROUND -->
+    <!-- ============================================================================== -->
     <div id="table-background-div">
       <img id="table-background" src="Build/Images/Table.png" alt="Table">
     </div>
-
-    <!-- Unity WebGL Container -->
+    <!-- UNITY WEBGL CONTAINER -->
+    <!-- ============================================================================== -->
     <div id="unity-container">
         <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
         <img id="overlay-image" src="Build/Images/Monitor.png" alt="Overlay Image">
         <img id="postit-note-1" src="Build/Images/Layer 2.png" alt="Post It Note 1">
     </div>
-
+    <!-- SCRIPTS -->
+    <!-- ============================================================================== -->
     <script src="Build/Build.loader.js"></script>
     <script src="script.js"></script>
-
     <script>
       var unityInstance = null;
 

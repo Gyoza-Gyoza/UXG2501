@@ -1,11 +1,22 @@
 console.log("✅ script.js has been loaded successfully!");
 
 document.addEventListener("DOMContentLoaded", function () {
-    function notifyUnity() {
+
+    //----------------------------------- Send Unity Message -----------------------------------------------
+    function notifyUnityRecyleBin() {
         console.log("📤 Sending message to Unity: HideRecycleBin");
 
         if (window.unityInstance) {
             window.unityInstance.SendMessage("Systems", "ReceiveMessage", "HideRecycleBin");
+            console.log("✅ Successfully sent message to Unity!");
+        }
+    }
+
+    function notifyUnityRoot() {
+        console.log("📤 Sending message to Unity: HideRecycleBin");
+
+        if (window.unityInstance) {
+            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "BlackScreen");
             console.log("✅ Successfully sent message to Unity!");
         }
     }
@@ -44,20 +55,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //--------------------------------------------------------------------------------------------------
 
-    // ✅ Add click event listener to button
-    const button = document.getElementById("hideRecycleBinButton");
-    if (button) {
-        button.addEventListener("click", function () {
-            console.log("🖱️ Button clicked! Sending message to Unity.");
-            notifyUnity();
-        });
-    }
+    // ✅ Add click event listener to button (Not Used)
+    // const button = document.getElementById("hideRecycleBinButton");
+    // if (button) {
+    //     button.addEventListener("click", function () {
+    //         console.log("🖱️ Button clicked! Sending message to Unity.");
+    //         notifyUnity();
+    //     });
+    // }
 
-    // ✅ Monitor comment changes
-    console.log("✅ Starting MutationObserver for comment tracking...");
+    //----------------------------------- Monitor Comment Changes for Phase 1 Edit -----------------------------------------------
+
+    console.log("✅ Starting MutationObserver for ChatAPT comment tracking...");
     let commentNode = null;
     document.body.childNodes.forEach((node) => {
-        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("ChatAPT Permission Level")) {
+        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("chatapt.exe_permission_level")) {
             commentNode = node;
         }
     });
@@ -65,10 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (commentNode) {
         const observer = new MutationObserver(() => {
             console.log(`📝 Comment changed: ${commentNode.nodeValue}`);
-            notifyUnity();
-            // changeTableImage();
-            // changeOverlayImage();
-            // changePostItImage();
+            notifyUnityRecyleBin();
         });
         observer.observe(commentNode, { characterData: true, subtree: true });
 
@@ -82,12 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("❌ Comment node not found!");
     }
 
-    // ✅ Monitor background color changes
+     //----------------------------------- Monitor Background Color Changes for Phase 2 Edit -----------------------------------------------
+
     console.log("✅ Starting MutationObserver for background color...");
-    const targetNode = document.getElementById("background-wallpaper");
+    const targetNode = document.getElementById("smart-home-control-panel");
 
     if (!targetNode) {
-        console.error("❌ Target element #background-wallpaper not found!");
+        console.error("❌ Target element #smart-home-control-panel not found!");
         return;
     }
 
@@ -100,7 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (newColor !== lastColor) {
             console.log(`🎨 Background color changed! New color: ${newColor}`);
             lastColor = newColor;
-            notifyUnity();
+            changeTableImage();
+            changeOverlayImage();
+            changePostItImage();
         }
     });
 
@@ -114,7 +126,38 @@ document.addEventListener("DOMContentLoaded", function () {
         if (newColor !== lastColor) {
             console.log(`🎨 Background color changed via computed style! New color: ${newColor}`);
             lastColor = newColor;
-            notifyUnity();
+            changeTableImage();
+            changeOverlayImage();
+            changePostItImage();
         }
     }, 500);
+
+    //--------------------------------------------------------------------------------------------------
+
+    //----------------------------------- Monitor Comment Changes for Phase 2 Edit -----------------------------------------------
+
+    console.log("✅ Starting MutationObserver for Root Access comment tracking...");
+    let commentNodeRoot = null;
+    document.body.childNodes.forEach((node) => {
+        if (node.nodeType === Node.COMMENT_NODE && node.nodeValue.includes("chatapt.exe_root_write_access")) {
+            commentNodeRoot = node;
+        }
+    });
+
+    if (commentNodeRoot) {
+        const observer = new MutationObserver(() => {
+            console.log(`📝 Comment changed: ${commentNodeRoot.nodeValue}`);
+            notifyUnityRoot();
+        });
+        observer.observe(commentNodeRoot, { characterData: true, subtree: true });
+
+        // ✅ Ensure updates even if tab is inactive
+        setInterval(() => {
+            if (document.hidden) {
+                observer.takeRecords();
+            }
+        }, 500);
+    } else {
+        console.error("❌ Comment node not found!");
+    }
 });
