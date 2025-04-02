@@ -1,6 +1,11 @@
 console.log("✅ script.js has been loaded successfully!");
 
     //----------------------------------- Change Images (Light to Dark) -----------------------------------------------
+    function ChangeWebBg() {
+        changeTableImage();
+        changeOverlayImage();
+        changePostItImage();
+    }
 
     function changeTableImage() {
         const imageContainer = document.getElementById("table-background"); //Ensure this ID exists in your HTML
