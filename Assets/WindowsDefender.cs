@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class WindowsDefenderConfirm : MonoBehaviour, IPointerEnterHandler
+public class WindowsDefender : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField]
     private int moves = 3;
+    private void Start()
+    {
+        if(PhaseManager.Instance.CurrentPhase is FinalPhase finalPhase)
+        {
+            GetComponent<Button>().onClick.AddListener(() =>
+            {
+                finalPhase.StopMessages(); 
+                transform.parent.gameObject.SetActive(false);
+                //StopCoroutine(ChatAPTBehaviour.Instance.windowShake);
+                StartCoroutine(EndSequence());
+            });
+        }
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(moves >= 1)
@@ -30,8 +44,11 @@ public class WindowsDefenderConfirm : MonoBehaviour, IPointerEnterHandler
             StartCoroutine(finalPhase.SpamMessages());
         }
     }
-    private void Update()
+    private IEnumerator EndSequence()
     {
-        
+        yield return new WaitForSeconds(1f);
+        ChatAPTBehaviour.Instance.CloseWindow();
+
+
     }
 }

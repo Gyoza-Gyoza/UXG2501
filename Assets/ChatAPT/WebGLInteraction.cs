@@ -39,7 +39,7 @@ public class WebGLInteraction : MonoBehaviour
                 }
                 break;
 
-            case "RemoveDiv":
+            case "BlackScreen":
                 if (PhaseManager.Instance.CurrentPhase is RemovingDiv removingDiv)
                 {
                     removingDiv.RemoveDiv();

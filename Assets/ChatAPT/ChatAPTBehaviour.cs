@@ -31,6 +31,18 @@ public class ChatAPTBehaviour : MonoBehaviour
     [SerializeField]
     private GameObject textArea;
 
+    [SerializeField]
+    private float windowShakeIntensity, windowShakeFrequency;
+
+    private RectTransform windowRectTransform;
+    private Vector3 windowOriginalPosition;
+
+    [SerializeField]
+    private GameObject blackScreen;
+
+    [HideInInspector]
+    public IEnumerator windowShake; 
+
     [Header("Attachment Variables")]
     [SerializeField]
     private GameObject attachmentArea;
@@ -79,6 +91,9 @@ public class ChatAPTBehaviour : MonoBehaviour
         chatScreen.SetActive(false);
         chatIcon.onClick.AddListener(OnIconClick);
         closeButton.onClick.AddListener(CloseWindow);
+
+        windowRectTransform = chatScreen.GetComponent<RectTransform>();
+        windowShake = WindowShake();
     }
     private void Update()
     {
@@ -134,6 +149,24 @@ public class ChatAPTBehaviour : MonoBehaviour
         chatScreen.SetActive(true);
     }
     
+    public void RemoveAllButWindow()
+    {
+        blackScreen.SetActive(true);
+        blackScreen.transform.SetAsLastSibling();
+        chatScreen.transform.SetAsLastSibling();
+    }
+    private IEnumerator WindowShake()
+    {
+        windowOriginalPosition = windowRectTransform.position;
+        while (true)
+        {
+            float x = Mathf.PerlinNoise(Time.time * windowShakeFrequency, 0f) * 2 - 1;
+            float y = Mathf.PerlinNoise(0f, Time.time * windowShakeFrequency) * 2 - 1;
+
+            windowRectTransform.anchoredPosition = windowOriginalPosition + new Vector3(x, y, 0) * windowShakeIntensity;
+            yield return null;
+        }
+    }
     #endregion Close Window
 
     #region Response System

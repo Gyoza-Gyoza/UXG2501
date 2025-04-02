@@ -71,6 +71,7 @@ public class PhaseManager : MonoBehaviour
                 }
             }
             if(Input.GetKeyDown(KeyCode.Alpha1)) CurrentPhase = new FinalPhase();
+            if(Input.GetKeyDown(KeyCode.Alpha2)) ChatAPTBehaviour.Instance.RemoveAllButWindow();
             if (Input.GetKeyDown(KeyCode.Alpha3)) if (CurrentPhase is FinalPhase finalPhase) finalPhase.SetPopupActive(true);
         }
     }
@@ -307,7 +308,7 @@ public class RemovingDiv : Phase //Phase 3.5
     }
     public void RemoveDiv()
     {
-        
+        ChatAPTBehaviour.Instance.RemoveAllButWindow();
     }
 }
 public class FinalPhase : Phase
@@ -334,12 +335,14 @@ public class FinalPhase : Phase
     public IEnumerator SpamMessages()
     {
         lastMessage = true;
+        //ChatAPTBehaviour.Instance.StartCoroutine(ChatAPTBehaviour.Instance.windowShake);
         while(lastMessage)
         {
             ChatAPTBehaviour.Instance.Respond(PhaseResponses[$"U000000{UnityEngine.Random.Range(messageRange.Item1 + 1, messageRange.Item2 + 1)}"]);
             yield return new WaitForSeconds(UnityEngine.Random.Range(messageFrequencyRange.Item1, messageFrequencyRange.Item2));
         }
     }
+    public void StopMessages() => lastMessage = false;
     private Vector3 GetRandomPosition()
     {
         return new Vector3(UnityEngine.Random.Range(0, Screen.width), UnityEngine.Random.Range(0, Screen.height));
