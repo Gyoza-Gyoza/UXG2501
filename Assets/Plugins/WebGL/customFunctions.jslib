@@ -1,5 +1,7 @@
 mergeInto(LibraryManager.library, {
-    RefreshPage: function() {
-        window.location.reload();
+    ChangeWebBg: function () {
+        changeTableImage();
+        changeOverlayImage();
+        changePostItImage();
     }
 });
