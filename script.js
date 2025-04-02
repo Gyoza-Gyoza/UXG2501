@@ -1,42 +1,6 @@
 console.log("✅ script.js has been loaded successfully!");
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    //----------------------------------- Send Unity Message -----------------------------------------------
-    function notifyUnityRecyleBin() {
-        console.log("📤 Sending message to Unity: HideRecycleBin");
-
-        if (window.unityInstance) {
-            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "HideRecycleBin");
-            console.log("✅ Successfully sent message to Unity!");
-        }
-    }
-
-    function notifyUnitySmartHome() {
-        console.log("📤 Sending message to Unity: SmartHome");
-
-        if (window.unityInstance) {
-            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "SmartHome");
-            console.log("✅ Successfully sent message to Unity!");
-        }
-    }
-
-    function notifyUnityRoot() {
-        console.log("📤 Sending message to Unity: BlackScreen");
-
-        if (window.unityInstance) {
-            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "BlackScreen");
-            console.log("✅ Successfully sent message to Unity!");
-        }
-    }
-
     //----------------------------------- Change Images (Light to Dark) -----------------------------------------------
-
-    function ChangeWebBg() {
-        changeTableImage();
-        changeOverlayImage();
-        changePostItImage();
-    }
 
     function changeTableImage() {
         const imageContainer = document.getElementById("table-background"); //Ensure this ID exists in your HTML
@@ -65,6 +29,36 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("✅ Image updated via MutationObserver.");
         } else {
             console.error("❌ Image container not found!");
+        }
+    }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    //----------------------------------- Send Unity Message -----------------------------------------------
+    function notifyUnityRecyleBin() {
+        console.log("📤 Sending message to Unity: HideRecycleBin");
+
+        if (window.unityInstance) {
+            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "HideRecycleBin");
+            console.log("✅ Successfully sent message to Unity!");
+        }
+    }
+
+    function notifyUnitySmartHome() {
+        console.log("📤 Sending message to Unity: SmartHome");
+
+        if (window.unityInstance) {
+            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "SmartHome");
+            console.log("✅ Successfully sent message to Unity!");
+        }
+    }
+
+    function notifyUnityRoot() {
+        console.log("📤 Sending message to Unity: BlackScreen");
+
+        if (window.unityInstance) {
+            window.unityInstance.SendMessage("Systems", "ReceiveMessage", "BlackScreen");
+            console.log("✅ Successfully sent message to Unity!");
         }
     }
 
