@@ -266,6 +266,8 @@ public class GettingPassword : Phase //Phase 2
         {
             Response result = PhaseResponses["U0000002"];
 
+            WebGLInteraction.ChangeWebBg();
+
             PhaseManager.Instance.CurrentPhase = new AnsweringQuestions();
 
             return result;

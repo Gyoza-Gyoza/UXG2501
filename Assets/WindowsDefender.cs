@@ -8,6 +8,8 @@ public class WindowsDefender : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField]
     private int moves = 3;
+    [SerializeField]
+    private GameObject finalPopup;
     private void Start()
     {
         if(PhaseManager.Instance.CurrentPhase is FinalPhase finalPhase)
@@ -49,6 +51,7 @@ public class WindowsDefender : MonoBehaviour, IPointerEnterHandler
         yield return new WaitForSeconds(1f);
         ChatAPTBehaviour.Instance.CloseWindow();
 
-
+        yield return new WaitForSeconds(1f);
+        finalPopup.SetActive(true);
     }
 }

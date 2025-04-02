@@ -1,10 +1,13 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI; // Required for UI components
 
 public class WebGLInteraction : MonoBehaviour
 {
-    public GameObject recycleBinObj;
+    [DllImport("__Internal")]
+    public static extern void ChangeWebBg();
 
+    public GameObject recycleBinObj;
     void Start()
     {
         Debug.Log("[UNITY] ✅ WebGL Script Loaded");
