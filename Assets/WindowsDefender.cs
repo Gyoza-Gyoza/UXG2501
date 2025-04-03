@@ -54,7 +54,7 @@ public class WindowsDefender : MonoBehaviour
     }
     public void CheckPassword()
     {
-        if (passwordInput.text == "111111")
+        if (passwordInput.text == "R-0294_204X")
         {
             SetResetKeyWindowActive(false);
             if(PhaseManager.Instance.CurrentPhase is FinalPhase finalPhase)
@@ -74,8 +74,10 @@ public class WindowsDefender : MonoBehaviour
     }
     private IEnumerator EndSequence()
     {
+        ChatAPTBehaviour.Instance.win = true;
         yield return new WaitForSeconds(1f);
         ChatAPTBehaviour.Instance.CloseWindow();
+        ChatAPTBehaviour.Instance.timerUI.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(1f);
         ChatAPTBehaviour.Instance.chatIcon.gameObject.SetActive(false);

@@ -68,6 +68,25 @@ public class ChatAPTBehaviour : MonoBehaviour
         User
     }
 
+    [Header("End variables")]
+    [SerializeField]
+    private GameObject lostScreen;
+    [SerializeField]
+    private float durationToLoss;
+    [SerializeField]
+    public TextMeshProUGUI timerUI;
+    public bool win; 
+    private float timer;
+    public float Timer
+    {
+        get { return timer; }
+        set 
+        { 
+            timer = value;
+            timerUI.text = ((int)value).ToString();
+        }
+    }
+
     private AudioSource messageReceivedAudio; 
 
     //Hide Window (Dylan)
@@ -250,4 +269,25 @@ public class ChatAPTBehaviour : MonoBehaviour
         attachmentBackground.SetActive(state);
     }
     #endregion
+    public void StartEndTimer()
+    {
+        timerUI.gameObject.SetActive(true);
+        timerUI.gameObject.transform.SetAsLastSibling();
+        StartCoroutine(StartEndTimerCoroutine());
+    }
+    private IEnumerator StartEndTimerCoroutine()
+    {
+        timer = durationToLoss;
+        while (true)
+        {
+            if (!win) Timer -= Time.deltaTime;
+            
+            if (Timer <= 0)
+            {
+                lostScreen.SetActive(true);
+                lostScreen.transform.SetAsLastSibling();
+            }
+            yield return null;
+        }
+    }
 }
