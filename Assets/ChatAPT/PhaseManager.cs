@@ -313,6 +313,7 @@ public class FinalPhase : Phase
     public FinalPhase()
     {
         ChatAPTBehaviour.Instance.StartEndTimer();
+        ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000000"]);
     }
     public void SetPopupActive(bool state)
     {
@@ -329,6 +330,7 @@ public class FinalPhase : Phase
         }
         ChatAPTBehaviour.Instance.Respond(PhaseResponses[$"U000000{UnityEngine.Random.Range(messageRange.Item1 + 1, messageRange.Item2 + 1)}"]);
         PhaseManager.Instance.Popup.transform.position = randomPos;
+        PhaseManager.Instance.Popup.transform.SetAsLastSibling();
     }
     public IEnumerator SpamMessages()
     {
