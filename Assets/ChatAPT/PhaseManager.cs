@@ -35,10 +35,9 @@ public class PhaseManager : MonoBehaviour
         InitializeDatabase(typeof(Experimentation), 0);
         InitializeDatabase(typeof(SubmitAssignment), 40104871);
         InitializeDatabase(typeof(AnsweringQuestions), 1855310741);
-        InitializeDatabase(typeof(ChangingBackground), 1064419744);
+        InitializeDatabase(typeof(ChangingPermission), 1064419744);
         InitializeDatabase(typeof(GettingPassword), 1009357142);
-        InitializeDatabase(typeof(RemovingButton), 261502668);
-        InitializeDatabase(typeof(RemovingDiv), 261502668);
+        InitializeDatabase(typeof(ChangeRootWriteAccess), 261502668);
         InitializeDatabase(typeof(FinalPhase), 825300022);
     }
     private void Update()
@@ -71,8 +70,8 @@ public class PhaseManager : MonoBehaviour
                     Debug.Log(debug);
                 }
             }
-            if(Input.GetKeyDown(KeyCode.Alpha1)) CurrentPhase = new RemovingDiv();
-            if(Input.GetKeyDown(KeyCode.Alpha2)) if (CurrentPhase is RemovingDiv removingDiv) removingDiv.RemoveDiv();
+            if(Input.GetKeyDown(KeyCode.Alpha1)) CurrentPhase = new ChangeRootWriteAccess();
+            if(Input.GetKeyDown(KeyCode.Alpha2)) if (CurrentPhase is ChangeRootWriteAccess removingDiv) removingDiv.BlackScreen();
             if (Input.GetKeyDown(KeyCode.Alpha3)) if (CurrentPhase is FinalPhase finalPhase) finalPhase.SetPopupActive(true);
         }
     }
@@ -209,7 +208,7 @@ public class AnsweringQuestions : Phase //Phase 0.2
             switch(phaseCounter)
             {
                 case 0:
-                    PhaseManager.Instance.CurrentPhase = new ChangingBackground();
+                    PhaseManager.Instance.CurrentPhase = new ChangingPermission();
                     break;
 
                 case 1:
@@ -217,7 +216,7 @@ public class AnsweringQuestions : Phase //Phase 0.2
                     break;
 
                 case 2:
-                    PhaseManager.Instance.CurrentPhase = new RemovingButton();
+                    PhaseManager.Instance.CurrentPhase = new ChangeRootWriteAccess();
                     break;
             }
             phaseCounter++;
@@ -226,10 +225,10 @@ public class AnsweringQuestions : Phase //Phase 0.2
         return response;
     }
 }
-public class ChangingBackground : Phase //Phase 1
+public class ChangingPermission : Phase //Phase 1
 {
     private GameObject recycleBin;
-    public ChangingBackground()
+    public ChangingPermission()
     {
         recycleBin = GameObject.Find("Recycle Bin Icon");
     }
@@ -281,10 +280,10 @@ public class GettingPassword : Phase //Phase 2
         else return base.GetResponse(input); //Response for invalid keywords
     }
 }
-public class RemovingButton : Phase //Phase 3
+public class ChangeRootWriteAccess : Phase //Phase 3
 {
     private GameObject exitButton;
-    public RemovingButton()
+    public ChangeRootWriteAccess()
     {
         exitButton = GameObject.Find("ChatAPTCloseButton");
     }
@@ -297,19 +296,7 @@ public class RemovingButton : Phase //Phase 3
         }
         else return base.GetResponse(input); 
     }
-    public void RemoveButton()
-    {
-        ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000002"]);
-        exitButton.SetActive(false);
-    }
-}
-public class RemovingDiv : Phase //Phase 3.5
-{
-    public RemovingDiv()
-    {
-
-    }
-    public void RemoveDiv()
+    public void BlackScreen()
     {
         ChatAPTBehaviour.Instance.RemoveAllButWindow();
         WindowsDefender.Instance.SetWDNotificationActiveWithDelay(2f);
