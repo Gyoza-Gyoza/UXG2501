@@ -38,6 +38,7 @@ public class PhaseManager : MonoBehaviour
         InitializeDatabase(typeof(ChangingBackground), 1064419744);
         InitializeDatabase(typeof(GettingPassword), 1009357142);
         InitializeDatabase(typeof(RemovingButton), 261502668);
+        InitializeDatabase(typeof(RemovingDiv), 261502668);
         InitializeDatabase(typeof(FinalPhase), 825300022);
     }
     private void Update()
@@ -70,8 +71,8 @@ public class PhaseManager : MonoBehaviour
                     Debug.Log(debug);
                 }
             }
-            if(Input.GetKeyDown(KeyCode.Alpha1)) CurrentPhase = new FinalPhase();
-            if(Input.GetKeyDown(KeyCode.Alpha2)) ChatAPTBehaviour.Instance.RemoveAllButWindow();
+            if(Input.GetKeyDown(KeyCode.Alpha1)) CurrentPhase = new RemovingDiv();
+            if(Input.GetKeyDown(KeyCode.Alpha2)) if (CurrentPhase is RemovingDiv removingDiv) removingDiv.RemoveDiv();
             if (Input.GetKeyDown(KeyCode.Alpha3)) if (CurrentPhase is FinalPhase finalPhase) finalPhase.SetPopupActive(true);
         }
     }
@@ -311,6 +312,7 @@ public class RemovingDiv : Phase //Phase 3.5
     public void RemoveDiv()
     {
         ChatAPTBehaviour.Instance.RemoveAllButWindow();
+        WindowsDefender.Instance.SetWDNotificationActiveWithDelay(2f);
     }
 }
 public class FinalPhase : Phase
@@ -322,7 +324,11 @@ public class FinalPhase : Phase
     public FinalPhase()
     {
     }
-    public void SetPopupActive(bool state) => PhaseManager.Instance.Popup.SetActive(state);
+    public void SetPopupActive(bool state)
+    {
+        PhaseManager.Instance.Popup.SetActive(state);
+        if (state) PhaseManager.Instance.Popup.transform.SetAsLastSibling();
+    }
     public void MovePopup()
     {
         Vector3 randomPos = GetRandomPosition();
