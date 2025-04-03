@@ -345,6 +345,6 @@ public class FinalPhase : Phase
     public void StopMessages() => lastMessage = false;
     private Vector3 GetRandomPosition()
     {
-        return new Vector3(UnityEngine.Random.Range(0, Screen.width), UnityEngine.Random.Range(0, Screen.height));
+        return new Vector3(UnityEngine.Random.Range(0 + 20f, Screen.width -20f), UnityEngine.Random.Range(0 + 20f, Screen.height - 20f));
     }
 }
