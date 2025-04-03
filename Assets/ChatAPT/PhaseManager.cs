@@ -300,6 +300,7 @@ public class ChangeRootWriteAccess : Phase //Phase 3
     {
         ChatAPTBehaviour.Instance.RemoveAllButWindow();
         WindowsDefender.Instance.SetWDNotificationActiveWithDelay(2f);
+        PhaseManager.Instance.CurrentPhase = new FinalPhase();
     }
 }
 public class FinalPhase : Phase

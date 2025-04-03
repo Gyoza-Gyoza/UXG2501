@@ -38,7 +38,7 @@ public class ChatAPTBehaviour : MonoBehaviour
     private Vector3 windowOriginalPosition;
 
     [SerializeField]
-    private GameObject blackScreen;
+    public GameObject blackScreen;
 
     [HideInInspector]
     public IEnumerator windowShake; 
