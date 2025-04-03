@@ -54,7 +54,7 @@ public class WindowsDefender : MonoBehaviour
     }
     public void CheckPassword()
     {
-        if (passwordInput.text == "R-0294_204X")
+        if (passwordInput.text == "111111")
         {
             SetResetKeyWindowActive(false);
             if(PhaseManager.Instance.CurrentPhase is FinalPhase finalPhase)
