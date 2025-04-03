@@ -29,23 +29,23 @@ public class WebGLInteraction : MonoBehaviour
         switch(message)
         {
             case "HideRecycleBin":
-                if (PhaseManager.Instance.CurrentPhase is ChangingBackground changingBackground)
+                if (PhaseManager.Instance.CurrentPhase is ChangingPermission changingBackground)
                 {
                     changingBackground.HideBin();
                 }
                 break;
 
             case "RemoveButton": 
-                if (PhaseManager.Instance.CurrentPhase is RemovingButton removeButton)
+                if (PhaseManager.Instance.CurrentPhase is ChangeRootWriteAccess removeButton)
                 {
-                    removeButton.RemoveButton();
+                    removeButton.BlackScreen();
                 }
                 break;
 
             case "BlackScreen":
-                if (PhaseManager.Instance.CurrentPhase is RemovingDiv removingDiv)
+                if (PhaseManager.Instance.CurrentPhase is ChangeRootWriteAccess changeRootWriteAccess)
                 {
-                    removingDiv.RemoveDiv();
+                    changeRootWriteAccess.BlackScreen();
                 }
                 break;
         }
