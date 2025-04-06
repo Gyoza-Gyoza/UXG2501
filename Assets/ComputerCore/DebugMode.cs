@@ -6,7 +6,7 @@ using UnityEngine;
 public class DebugMode : MonoBehaviour
 {
     [SerializeField]
-    private GameObject debugMode;
+    public GameObject debugMode;
     [SerializeField]
     private TextMeshProUGUI currentPhaseTMP, responseGivenTMP;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class PhaseManager : MonoBehaviour
@@ -17,9 +18,44 @@ public class PhaseManager : MonoBehaviour
         {
             DebugMode.Instance.SetCurrentPhase(value);
             currentPhase = value; 
+            switch (currentPhase)
+            {
+                case Experimentation: phaseCounter = 0; break;
+                case SubmitAssignment: phaseCounter = 1; break;
+                case AnsweringQuestions: phaseCounter = 2; break;
+                case ChangingPermission: phaseCounter = 3; break;
+                case GettingPassword: phaseCounter = 4; break;
+                case ChangeRootWriteAccess: phaseCounter = 5; break;
+                case FinalPhase: phaseCounter = 6; break;
+            }
         }
     }
+    [SerializeField]
+    private TextMeshProUGUI clock;
+    [SerializeField]
+    private GameObject timesUpPopup, timesUpLoseScreen;
+
     public GameObject Popup;
+    private int phaseCounter;
+    private int currentTime = 45;
+    private int CurrentTime
+    {
+        get
+        {
+            return currentTime;
+        }
+        set
+        {
+            currentTime = value;
+            if (value < 60) clock.text = $"11:{value}pm";
+            else
+            {
+                clock.text = "12:00am";
+                StartCoroutine(TimesUp());
+            }
+        }
+    }
+    private float seconds;
 
     public static PhaseManager Instance;
     private void Awake()
@@ -42,12 +78,6 @@ public class PhaseManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Equals)) Debug.Log("Current Phase: " + CurrentPhase);
-        if (Input.GetKeyDown(KeyCode.Minus))
-        {
-            if(CurrentPhase == null) Debug.Log("Null");
-            CurrentPhase = new Experimentation();
-        }
         if (Input.GetKey(KeyCode.LeftAlt))
         {
             if(Input.GetKeyDown(KeyCode.O))
@@ -74,6 +104,12 @@ public class PhaseManager : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Alpha2)) if (CurrentPhase is ChangeRootWriteAccess removingDiv) removingDiv.BlackScreen();
             if (Input.GetKeyDown(KeyCode.Alpha3)) if (CurrentPhase is FinalPhase finalPhase) finalPhase.SetPopupActive(true);
         }
+        if (DebugMode.Instance.debugMode.activeInHierarchy)
+        {
+            if (Input.GetKeyDown(KeyCode.Equals)) ChangePhase(++phaseCounter);
+            if (Input.GetKeyDown(KeyCode.Minus)) ChangePhase(--phaseCounter);
+        }
+        Clock();
     }
     private void InitializeDatabase(Type type, int gid)
     {
@@ -93,26 +129,50 @@ public class PhaseManager : MonoBehaviour
         }
         return false;
     }
-    //private IEnumerator TakeOverSequence()
-    //{
-    //    //AI takes over 
-    //    //Windows defender pops up 
-    //    //Bunch of minigames appear 
-    //    //Captcha kind 
-    //    //After completion, windows defender will have a pop up saying virus detected and asking if the user wants to remove the virus
-    //    //AI will spam messages, telling the user to stop it (Maybe can have a message popup) 
-    //    //When the player tries to click on the remove virus button, the AI will move the popup around, trying to get the player to not click on the popup 
-    //}
+    private void ChangePhase(int counter)
+    {
+        switch(counter)
+        {
+            case 0: CurrentPhase = new Experimentation(); break;
+            case 1: CurrentPhase = new SubmitAssignment(); break;
+            case 2: CurrentPhase = new AnsweringQuestions(); break;
+            case 3: CurrentPhase = new ChangingPermission(); break;
+            case 4: CurrentPhase = new GettingPassword(); break;
+            case 5: CurrentPhase = new ChangeRootWriteAccess(); break;
+            case 6: CurrentPhase = new FinalPhase(); break;
+        }
+    }
+    private void Clock()
+    {
+        seconds += Time.deltaTime;
+        Debug.Log(seconds);
+        if(seconds >= 3f)
+        {
+            seconds -= 3f;
+            CurrentTime += 1;
+        }
+    }
+    private IEnumerator TimesUp()
+    {
+        timesUpPopup.SetActive(true);
+        yield return new WaitForSeconds(10f);
+        timesUpLoseScreen.SetActive(true);
+    }
 }
 
 public class Phase
 {
     public Dictionary<string, Response> PhaseResponses
-    { get; protected set; }
+    {
+        get
+        {
+            return PhaseManager.Instance.Phases[GetType()];
+        }
+    }
     protected bool initialPromptGiven = false;
     public Phase()
     {
-        PhaseResponses = PhaseManager.Instance.Phases[GetType()];
+        
     }
     public virtual Response GetResponse(string input)
     {
@@ -139,6 +199,13 @@ public class Phase
     public virtual void OnAttach()
     {
 
+    }
+    protected void UnlockResponses(int min, int max)
+    {
+        for(int i = min; i <= max; i++)
+        {
+            PhaseManager.Instance.Phases[typeof(AnsweringQuestions)][$"L{i}"].isUnlocked = true;
+        }
     }
 }
 public class Experimentation : Phase //Phase 0
@@ -231,6 +298,7 @@ public class ChangingPermission : Phase //Phase 1
     public ChangingPermission()
     {
         recycleBin = GameObject.Find("Recycle Bin Icon");
+        UnlockResponses(1, 33);
     }
     public override Response GetResponse(string input)
     {
