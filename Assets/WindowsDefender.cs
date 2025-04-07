@@ -107,4 +107,8 @@ public class WindowsDefender : MonoBehaviour
         yield return new WaitForSeconds(3f);
         finalPopup.SetActive(true);
     }
+    public void DismissNotification()
+    {
+        finalPopup.SetActive(false);
+    }
 }

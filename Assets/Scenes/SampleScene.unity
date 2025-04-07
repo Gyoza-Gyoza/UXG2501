@@ -2384,7 +2384,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You are all given an extension, good luck!
+  m_text: The assignment deadline is extended! You win!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 61a45750ebcc00b42bacbb0f60a84fe1, type: 2}
   m_sharedMaterial: {fileID: 2045480942873950505, guid: 61a45750ebcc00b42bacbb0f60a84fe1, type: 2}
@@ -3501,7 +3501,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 25, y: -69}
-  m_SizeDelta: {x: 199.45, y: 50}
+  m_SizeDelta: {x: 289.75, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &751235034
 MonoBehaviour:
@@ -3523,7 +3523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Enter reset key:'
+  m_text: 'Enter Reset Key (Find Key in Elements):'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 61a45750ebcc00b42bacbb0f60a84fe1, type: 2}
   m_sharedMaterial: {fileID: 2045480942873950505, guid: 61a45750ebcc00b42bacbb0f60a84fe1, type: 2}
@@ -3550,8 +3550,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5131,7 +5131,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1199958882}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1048299082}
+        m_TargetAssemblyTypeName: WindowsDefender, Assembly-CSharp
+        m_MethodName: DismissNotification
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1199958882
 MonoBehaviour:
   m_ObjectHideFlags: 0
