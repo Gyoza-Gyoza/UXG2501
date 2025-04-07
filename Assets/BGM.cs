@@ -19,4 +19,10 @@ public class BGM : MonoBehaviour
         source.clip = bGMs[clip];
         source.Play();
     }
+
+    public void StopClip(int clip)
+    {
+        source.clip = bGMs[clip];
+        source.Stop();
+    }
 }

@@ -104,6 +104,9 @@ public class WindowsDefender : MonoBehaviour
 
         ChatAPTBehaviour.Instance.blackScreen.SetActive(false);
 
+        //Stop BGM playing
+        BGM.Instance.StopClip(1);
+
         yield return new WaitForSeconds(3f);
         finalPopup.SetActive(true);
     }
