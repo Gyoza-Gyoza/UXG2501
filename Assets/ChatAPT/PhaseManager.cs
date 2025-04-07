@@ -145,10 +145,10 @@ public class PhaseManager : MonoBehaviour
     private void Clock()
     {
         seconds += Time.deltaTime;
-        Debug.Log(seconds);
-        if(seconds >= 3f)
+
+        if(seconds >= 60f)
         {
-            seconds -= 3f;
+            seconds -= 60f;
             CurrentTime += 1;
         }
     }
@@ -321,7 +321,7 @@ public class GettingPassword : Phase //Phase 2
     private string password = "029384";
     public GettingPassword()
     {
-        
+        UnlockResponses(34, 43);
     }
     public override Response GetResponse(string input)
     {
@@ -383,6 +383,7 @@ public class FinalPhase : Phase
     {
         ChatAPTBehaviour.Instance.StartEndTimer();
         ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000000"]);
+        UnlockResponses(44, 77);
     }
     public void SetPopupActive(bool state)
     {
