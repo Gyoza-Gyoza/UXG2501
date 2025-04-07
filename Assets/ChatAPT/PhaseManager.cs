@@ -354,6 +354,7 @@ public class ChangeRootWriteAccess : Phase //Phase 3
     public ChangeRootWriteAccess()
     {
         ChatAPTBehaviour.Instance.closeButton.gameObject.SetActive(false);
+        UnlockResponses(44, 55);
         //exitButton = GameObject.Find("ChatAPTCloseButton");
     }
     public override Response GetResponse(string input)
@@ -383,7 +384,7 @@ public class FinalPhase : Phase
     {
         ChatAPTBehaviour.Instance.StartEndTimer();
         ChatAPTBehaviour.Instance.Respond(PhaseResponses["U0000000"]);
-        UnlockResponses(44, 77);
+        UnlockResponses(56, 77);
     }
     public void SetPopupActive(bool state)
     {
