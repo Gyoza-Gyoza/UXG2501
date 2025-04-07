@@ -19,7 +19,11 @@ public class DebugMode : MonoBehaviour
     }
     private void Update()
     {
-        if ((Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) || (Input.GetKey(KeyCode.RightControl) && Input.GetKeyDown(KeyCode.Q))) debugMode.SetActive(!debugMode.activeInHierarchy);
+        if ((Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Q)) || (Input.GetKey(KeyCode.RightControl) && Input.GetKeyDown(KeyCode.Q)))
+        {
+            debugMode.SetActive(!debugMode.activeInHierarchy);
+            debugMode.transform.SetAsLastSibling();
+        }
     }
     public void SetCurrentPhase(Phase phase)
     {
