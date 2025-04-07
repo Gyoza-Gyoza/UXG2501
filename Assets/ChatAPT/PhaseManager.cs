@@ -354,7 +354,6 @@ public class ChangeRootWriteAccess : Phase //Phase 3
     public ChangeRootWriteAccess()
     {
         ChatAPTBehaviour.Instance.closeButton.gameObject.SetActive(false);
-        UnlockResponses(44, 55);
         //exitButton = GameObject.Find("ChatAPTCloseButton");
     }
     public override Response GetResponse(string input)
@@ -370,6 +369,7 @@ public class ChangeRootWriteAccess : Phase //Phase 3
     {
         ChatAPTBehaviour.Instance.RemoveAllButWindow();
         WindowsDefender.Instance.SetWDNotificationActiveWithDelay(2f);
+        UnlockResponses(44, 55);
         BGM.Instance.PlayClip(1);
         PhaseManager.Instance.CurrentPhase = new FinalPhase();
     }
