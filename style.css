@@ -41,12 +41,13 @@ html, body {
 }
 
 #postit-note-1 {
-    position: absolute;
-    top: 660px;
-    left: 430px;
-    width: 450px;
+    position: absolute; /* Use fixed if you want it to remain in the same position on scroll */
+    top: 660px; /* Adjust this value to move the element up or down */
+    left: 50%;
+    transform: translateX(-60%); /* Centers the element horizontally */
+    width: 700px;
     height: auto;
-    aspect-ratio: 2766/1100;
+    aspect-ratio: 4062/1159;
     z-index: 10; /* Ensures it's on top */
     pointer-events: none; /* Allows interaction with Unity */
 }
