@@ -264,7 +264,7 @@ public class AnsweringQuestions : Phase //Phase 0.2
 
         foreach (string str in input.ToLower().Split(' ')) //Checks if the user is asking about questions
         {
-            if (str == "question")
+            if (str == "question" || IsNumber(str))
             {
                 counter++;
             }
@@ -290,6 +290,14 @@ public class AnsweringQuestions : Phase //Phase 0.2
         }
 
         return response;
+    }
+    private bool IsNumber(string input)
+    {
+        foreach(char c in input)
+        {
+            if (!char.IsDigit(c)) return false;
+        }
+        return true;
     }
 }
 public class ChangingPermission : Phase //Phase 1
