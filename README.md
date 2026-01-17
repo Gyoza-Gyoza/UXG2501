@@ -1,4 +1,4 @@
-# UXG2501
+# My assignment is due in 15 minutes so I resorted to using AI, it was insane
 
 ## Current Features  
   
